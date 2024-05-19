@@ -7,8 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Commands\DeleteDonor\" />
-    <Folder Include="Commands\UpdateDonor\" />
     <Folder Include="Validators\" />
   </ItemGroup>
 
