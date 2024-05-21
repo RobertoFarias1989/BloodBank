@@ -64,6 +64,8 @@ public class CreateDonationCommandHandler : IRequestHandler<CreateDonationComman
 
         await _donationRepository.AddAsync(donation);
 
+        //TO DO: criar ou atualizar BloodStock depois da doação
+
         return donation.Id;
 
     }

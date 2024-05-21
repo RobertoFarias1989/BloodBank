@@ -30,18 +30,47 @@ public class DonorConfigurations : BaseEntityConfigurations<Donor>
             .HasColumnName("datetime");
 
         builder
-            .OwnsOne(d => d.Address);
+            .OwnsOne(d => d.Address)
+            .Property(a => a.Street)
+            .HasMaxLength(100);
 
         builder
-            .OwnsOne(d => d.Name);
+            .OwnsOne(d => d.Address)
+            .Property(a => a.City)
+            .HasMaxLength(100);
+
+        builder
+            .OwnsOne(d => d.Address)
+            .Property(a => a.State)
+            .HasMaxLength(100);
+
+        builder
+            .OwnsOne(d => d.Address)
+            .Property(a => a.PostalCode)
+            .HasMaxLength(100);
+
+        builder
+            .OwnsOne(d => d.Address)
+            .Property(a => a.Country)
+            .HasMaxLength(50);
+
+        builder
+            .OwnsOne(d => d.Name)
+            .Property(n => n.FullName)
+            .HasMaxLength(150);
 
         builder
             .OwnsOne(d => d.CPF,
             cpf=>
             {
-                cpf.HasIndex(d => d.Number)
+                cpf.HasIndex(d => d.CPFNumber)
                 .IsUnique();
             });
+
+        builder
+           .OwnsOne(d => d.CPF)
+           .Property(c => c.CPFNumber)
+           .HasMaxLength(11);
 
         builder
             .OwnsOne(d => d.Email,
@@ -52,5 +81,9 @@ public class DonorConfigurations : BaseEntityConfigurations<Donor>
                 .IsUnique();
             });
 
+        builder
+            .OwnsOne(d => d.Email)
+            .Property(e => e.EmailAddress)
+            .HasMaxLength(100);
     }
 }
