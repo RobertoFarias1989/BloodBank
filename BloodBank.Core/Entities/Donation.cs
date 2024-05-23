@@ -2,12 +2,19 @@
 
 public class Donation : BaseEntity
 {
-    public Donation(int quantityML, int idDonor) : base()
+    public Donation()
+    {
+
+    }
+    public Donation(int quantityML, int idDonor)
     {
         QuantityML = quantityML;
         IdDonor = idDonor;
 
         DonationDate = DateTime.Now;
+        CreatedAt = DateTime.Now;
+        IsActive = true;
+        UpdatedAt = null;
     }
 
     public DateTime DonationDate { get; private set; }
@@ -18,6 +25,14 @@ public class Donation : BaseEntity
     public void UpdateML(int quantityML)
     {
         QuantityML = quantityML;
+    }
+
+    public  void Inactive()
+    {
+        if (IsActive == true)
+            IsActive = false;
+
+        UpdatedAt = DateTime.Now;
     }
 
 }

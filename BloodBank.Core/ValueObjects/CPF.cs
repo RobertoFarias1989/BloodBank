@@ -4,6 +4,10 @@ namespace BloodBank.Core.ValueObjects;
 
 public class CPF : BaseValueObject
 {
+    public CPF()
+    {
+
+    }
     public CPF(string number)
     {
         if(!IsCPFValidate(number))

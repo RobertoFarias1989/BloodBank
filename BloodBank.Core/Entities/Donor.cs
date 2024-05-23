@@ -5,6 +5,10 @@ namespace BloodBank.Core.Entities;
 
 public class Donor : BaseEntity
 {
+    public Donor()
+    {
+
+    }
     public Donor(Name name,
         CPF cpf,
         Email email,
@@ -13,7 +17,7 @@ public class Donor : BaseEntity
         double weight,
         BloodTypeEnum bloodType,
         RHFactorEnum rHFactor,
-        Address address) : base()
+        Address address)
     {
         Name = name;
         CPF = cpf;
@@ -26,6 +30,9 @@ public class Donor : BaseEntity
         Address = address;
 
         Donations = new List<Donation>();
+        CreatedAt = DateTime.Now;
+        IsActive = true;
+        UpdatedAt = null;
     }
 
     public Name Name { get; private set; }
@@ -52,6 +59,14 @@ public class Donor : BaseEntity
         BloodType = bloodType;
         RHFactor = rHFactor;
         Address = address;
+
+        UpdatedAt = DateTime.Now;
+    }
+
+    public  void Inactive()
+    {
+        if (IsActive == true)
+            IsActive = false;
 
         UpdatedAt = DateTime.Now;
     }

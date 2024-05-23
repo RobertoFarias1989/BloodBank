@@ -85,5 +85,11 @@ public class DonorConfigurations : BaseEntityConfigurations<Donor>
             .OwnsOne(d => d.Email)
             .Property(e => e.EmailAddress)
             .HasMaxLength(100);
+
+        builder
+            .HasMany(d => d.Donations)
+            .WithOne(dt => dt.Donor)
+            .HasForeignKey(dt => dt.IdDonor)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

@@ -2,21 +2,16 @@
 
 public abstract class BaseEntity
 {
+    //construtor vazio para uso do EF Core quando for rodar as migrations
     protected BaseEntity()
     {
-        IsActive = true;
-        CreatedAt = DateTime.Now;
-        UpdatedAt = null;
+
     }
 
-    public int Id { get; private set; }
-    public bool IsActive { get; private set; }
-    public DateTime CreatedAt { get; private set; }
+    //usamos o protected para que assim seja possível acessar estas propriedades das classes derivadas
+    public int Id { get; protected set; }
+    public bool IsActive { get; protected set; }
+    public DateTime CreatedAt { get; protected set; }
     public DateTime? UpdatedAt { get; protected set; }
 
-    public void Inactive()
-    {
-        if(IsActive == true)
-            IsActive = false;
-    }
 }

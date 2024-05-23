@@ -12,7 +12,7 @@ public class BloodStockConfigurations : BaseEntityConfigurations<BloodStock>
         builder
             .Property(bs => bs.BloodType)
             .HasConversion(typeof(string))
-            .HasMaxLength(10);
+            .HasMaxLength(20);
 
         builder
             .Property(bs => bs.RHFactor)
