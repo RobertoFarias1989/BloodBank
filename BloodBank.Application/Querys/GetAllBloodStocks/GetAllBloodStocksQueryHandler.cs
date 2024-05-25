@@ -8,6 +8,12 @@ namespace BloodBank.Application.Querys.GetAllBloodStocks;
 public class GetAllBloodStocksQueryHandler : IRequestHandler<GetAllBloodStocksQuery, List<BloodStockViewModel>>
 {
     private readonly IBloodStockRepository _bloodStockRepository;
+
+    public GetAllBloodStocksQueryHandler(IBloodStockRepository bloodStockRepository)
+    {
+        _bloodStockRepository = bloodStockRepository;
+    }
+
     public async Task<List<BloodStockViewModel>> Handle(GetAllBloodStocksQuery request, CancellationToken cancellationToken)
     {
         var bloodStock = await _bloodStockRepository.GetAllAsync();
