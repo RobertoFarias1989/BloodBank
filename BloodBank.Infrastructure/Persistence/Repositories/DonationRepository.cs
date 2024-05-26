@@ -38,12 +38,12 @@ public class DonationRepository : IDonationRepository
     public async Task AddAsync(Donation donation)
     {
         await _dbContext.Donations.AddAsync(donation);
-        SaveChangesAsync();
+        await SaveChangesAsync();
     }
     public async Task UpdateAsync(Donation donation)
     {
-        _dbContext.Donations.Update(donation);
-        SaveChangesAsync();
+         _dbContext.Donations.Update(donation);
+        await SaveChangesAsync();
     }
 
     public async Task SaveChangesAsync()

@@ -100,7 +100,7 @@ namespace BloodBank.Infrastructure.Persistence.Migrations
 
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime2")
-                        .HasColumnName("datetime");
+                        .HasColumnName("BirthDate");
 
                     b.Property<string>("BloodType")
                         .IsRequired()
@@ -155,27 +155,32 @@ namespace BloodBank.Infrastructure.Persistence.Migrations
                             b1.Property<string>("City")
                                 .IsRequired()
                                 .HasMaxLength(100)
-                                .HasColumnType("nvarchar(100)");
+                                .HasColumnType("nvarchar(100)")
+                                .HasColumnName("City");
 
                             b1.Property<string>("Country")
                                 .IsRequired()
                                 .HasMaxLength(50)
-                                .HasColumnType("nvarchar(50)");
+                                .HasColumnType("nvarchar(50)")
+                                .HasColumnName("Country");
 
                             b1.Property<string>("PostalCode")
                                 .IsRequired()
                                 .HasMaxLength(100)
-                                .HasColumnType("nvarchar(100)");
+                                .HasColumnType("nvarchar(100)")
+                                .HasColumnName("PostalCode");
 
                             b1.Property<string>("State")
                                 .IsRequired()
                                 .HasMaxLength(100)
-                                .HasColumnType("nvarchar(100)");
+                                .HasColumnType("nvarchar(100)")
+                                .HasColumnName("State");
 
                             b1.Property<string>("Street")
                                 .IsRequired()
                                 .HasMaxLength(100)
-                                .HasColumnType("nvarchar(100)");
+                                .HasColumnType("nvarchar(100)")
+                                .HasColumnName("Street");
 
                             b1.HasKey("DonorId");
 
@@ -193,7 +198,8 @@ namespace BloodBank.Infrastructure.Persistence.Migrations
                             b1.Property<string>("CPFNumber")
                                 .IsRequired()
                                 .HasMaxLength(11)
-                                .HasColumnType("nvarchar(11)");
+                                .HasColumnType("nvarchar(11)")
+                                .HasColumnName("CPFNumber");
 
                             b1.HasKey("DonorId");
 
@@ -214,7 +220,8 @@ namespace BloodBank.Infrastructure.Persistence.Migrations
                             b1.Property<string>("EmailAddress")
                                 .IsRequired()
                                 .HasMaxLength(100)
-                                .HasColumnType("nvarchar(100)");
+                                .HasColumnType("nvarchar(100)")
+                                .HasColumnName("EmailAddress");
 
                             b1.HasKey("DonorId");
 
@@ -235,7 +242,8 @@ namespace BloodBank.Infrastructure.Persistence.Migrations
                             b1.Property<string>("FullName")
                                 .IsRequired()
                                 .HasMaxLength(150)
-                                .HasColumnType("nvarchar(150)");
+                                .HasColumnType("nvarchar(150)")
+                                .HasColumnName("FullName");
 
                             b1.HasKey("DonorId");
 

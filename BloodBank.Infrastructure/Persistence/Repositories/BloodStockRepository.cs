@@ -42,7 +42,7 @@ public class BloodStockRepository : IBloodStockRepository
     public async Task AddAsync(BloodStock bloodStock)
     {
         await _dbContext.BloodStocks.AddAsync(bloodStock);
-        SaveChangesAsync();
+        await SaveChangesAsync();
     }
 
     public async Task UpdateAsync(BloodStock bloodStock)
@@ -56,7 +56,7 @@ public class BloodStockRepository : IBloodStockRepository
         //para que assim as alterações seja persistidas pelo SaveChanges
         /*_dbContext.Entry(bloodStock).State = EntityState.Modified;*/
 
-        SaveChangesAsync();
+        await SaveChangesAsync();
     }
 
     public async Task SaveChangesAsync()

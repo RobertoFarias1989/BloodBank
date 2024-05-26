@@ -19,6 +19,8 @@ public class DeleteDonorCommandHandler : IRequestHandler<DeleteDonorCommand, Uni
         if(donor.IsActive == true)
         {
             donor.Inactive();
+
+            await _donorRepository.UpdateAsync(donor);
         }
         else
         {

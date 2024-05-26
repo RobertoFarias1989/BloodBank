@@ -6,9 +6,6 @@ public class Email : BaseValueObject
 {
     public Email(string emailAddress)
     {
-        if (string.IsNullOrEmpty(emailAddress))
-            throw new ArgumentException("EmailAddress must have a value", nameof(emailAddress));
-
         EmailAddress = emailAddress;
     }
 

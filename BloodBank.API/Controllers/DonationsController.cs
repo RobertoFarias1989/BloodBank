@@ -21,7 +21,7 @@ public class DonationsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> Get(string query)
+    public async Task<IActionResult> Get(string? query)
     {
         var getAllDonationsQuery = new GetAllDonationsQuery(query);
 
@@ -48,9 +48,9 @@ public class DonationsController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Post([FromBody] CreateDonationCommand command)
     {
-        await _mediator.Send(command);
+        var id = await _mediator.Send(command);
 
-        return NoContent();
+        return CreatedAtAction(nameof(GetById), new {id = id}, command);
     }
 
     [HttpPut("{id}")]

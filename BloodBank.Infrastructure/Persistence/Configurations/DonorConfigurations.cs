@@ -27,41 +27,47 @@ public class DonorConfigurations : BaseEntityConfigurations<Donor>
 
         builder
             .Property(d => d.BirthDate)
-            .HasColumnName("datetime");
+            .HasColumnName("BirthDate");
 
         builder
             .OwnsOne(d => d.Address)
             .Property(a => a.Street)
+            .HasColumnName("Street")
             .HasMaxLength(100);
 
         builder
             .OwnsOne(d => d.Address)
             .Property(a => a.City)
+            .HasColumnName("City")
             .HasMaxLength(100);
 
         builder
             .OwnsOne(d => d.Address)
             .Property(a => a.State)
+            .HasColumnName("State")
             .HasMaxLength(100);
 
         builder
             .OwnsOne(d => d.Address)
             .Property(a => a.PostalCode)
+            .HasColumnName("PostalCode")
             .HasMaxLength(100);
 
         builder
             .OwnsOne(d => d.Address)
             .Property(a => a.Country)
+            .HasColumnName("Country")
             .HasMaxLength(50);
 
         builder
             .OwnsOne(d => d.Name)
             .Property(n => n.FullName)
+            .HasColumnName("FullName")
             .HasMaxLength(150);
 
         builder
             .OwnsOne(d => d.CPF,
-            cpf=>
+            cpf =>
             {
                 cpf.HasIndex(d => d.CPFNumber)
                 .IsUnique();
@@ -70,6 +76,7 @@ public class DonorConfigurations : BaseEntityConfigurations<Donor>
         builder
            .OwnsOne(d => d.CPF)
            .Property(c => c.CPFNumber)
+           .HasColumnName("CPFNumber")
            .HasMaxLength(11);
 
         builder
@@ -83,7 +90,8 @@ public class DonorConfigurations : BaseEntityConfigurations<Donor>
 
         builder
             .OwnsOne(d => d.Email)
-            .Property(e => e.EmailAddress)
+            .Property(d => d.EmailAddress)
+            .HasColumnName("EmailAddress")
             .HasMaxLength(100);
 
         builder

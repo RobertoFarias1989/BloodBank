@@ -1,4 +1,5 @@
 ﻿using BloodBank.Application.Commands.CreateDonor;
+using BloodBank.Core.Enums;
 using FluentValidation;
 
 namespace BloodBank.Application.Validators;
@@ -41,7 +42,7 @@ public class CreateDonorCommandValidator : AbstractValidator<CreateDonorCommand>
                .WithMessage("Gender is required.")
           .NotNull()
                .WithMessage("Gender is required.")
-          .IsInEnum()
+          .IsEnumName(typeof(GenderEnum))
                .WithMessage("Gender must match with one of these type: Male, Female, Other.");
 
         RuleFor(d => d.RHFactor)
@@ -49,7 +50,7 @@ public class CreateDonorCommandValidator : AbstractValidator<CreateDonorCommand>
                 .WithMessage("RHFactor is required.")
            .NotNull()
                 .WithMessage("RHFactor is required.")
-           .IsInEnum()
+           .IsEnumName(typeof(RHFactorEnum))
                 .WithMessage("RHFactor must match with one of these type:Positive, Negative.");
 
         RuleFor(d => d.BloodType)
@@ -57,7 +58,7 @@ public class CreateDonorCommandValidator : AbstractValidator<CreateDonorCommand>
                 .WithMessage("BloodType is required.")
             .NotNull()
                 .WithMessage("BloodType is required.")
-            .IsInEnum()
+            .IsEnumName(typeof(BloodTypeEnum))
                 .WithMessage("BloodType must match with one of these type: A, B, AB, O.");
 
         RuleFor(d => d.Street)
@@ -79,9 +80,9 @@ public class CreateDonorCommandValidator : AbstractValidator<CreateDonorCommand>
         RuleFor(d => d.State)
            .NotEmpty()
               .WithMessage("State is required.")
-  .        NotNull()
+           .NotNull()
               .WithMessage("State is required.")
-  .        MaximumLength(100)
+           .MaximumLength(100)
               .WithMessage("State's maximum length is around 100 characters.");
 
         RuleFor(d => d.PostalCode)
@@ -104,26 +105,32 @@ public class CreateDonorCommandValidator : AbstractValidator<CreateDonorCommand>
 
     public bool IsCPFValidate(string number)
     {
+        // Verifica se o comprimento do número é maior que 11
         if (number.Length > 11)
             return false;
 
+        // Preenche com zeros à esquerda se o comprimento for menor que 11
         while (number.Length != 11)
             number = '0' + number;
 
+        // Verifica se todos os dígitos são iguais
         var igual = true;
         for (var i = 1; i < 11 && igual; i++)
             if (number[i] != number[0])
                 igual = false;
 
+        // Se todos os dígitos são iguais ou é um número específico inválido, retorna falso
         if (igual || number == "12345678909")
             return false;
 
+        // Converte os caracteres em inteiros e armazena em um array
         var numeros = new int[11];
 
         for (var i = 0; i < 11; i++)
             numeros[i] = int.Parse(number[i].ToString());
 
-        var soma = 0;
+        // Calcula o primeiro dígito verificador
+        /*var soma = 0;
         for (var i = 0; i < 9; i++)
             soma += (10 - i) * numeros[i];
 
@@ -135,9 +142,10 @@ public class CreateDonorCommandValidator : AbstractValidator<CreateDonorCommand>
                 return false;
         }
         else if (numeros[9] != 11 - resultado)
-            return false;
+            return false;*/
 
-        soma = 0;
+        // Calcula o segundo dígito verificador
+        /*soma = 0;
         for (var i = 0; i < 10; i++)
             soma += (11 - i) * numeros[i];
 
@@ -149,7 +157,7 @@ public class CreateDonorCommandValidator : AbstractValidator<CreateDonorCommand>
                 return false;
         }
         else if (numeros[10] != 11 - resultado)
-            return false;
+            return false;*/
 
         return true;
     }

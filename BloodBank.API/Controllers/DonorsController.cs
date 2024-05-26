@@ -31,7 +31,7 @@ public class DonorsController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> Get(int id)
+    public async Task<IActionResult> GetById(int id)
     {
         var query = new GetDonorByIdQuery(id);
 
@@ -48,9 +48,9 @@ public class DonorsController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Post([FromBody] CreateDonorCommand command)
     {
-        await _mediator.Send(command);
+        var id = await _mediator.Send(command);
 
-        return NoContent();
+        return CreatedAtAction(nameof(GetById), new { id = id }, command);
     }
 
     [HttpPut("{id}")]
