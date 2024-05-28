@@ -17,9 +17,9 @@ public class CreateDonationCommandHandler : IRequestHandler<CreateDonationComman
 
     public async Task<int> Handle(CreateDonationCommand request, CancellationToken cancellationToken)
     {
-        var donor = await _donorRepository.GetDetailsByIdAsync(request.IdDonor);        
+        var donor = await _donorRepository.GetDetailsByIdAsync(request.IdDonor);
 
-        //Menor de idade não pode doar, mas pode ter cadastro.
+        //Menor de idade não pode doar, mas pode ter cadastro.      
         var today = DateTime.Today;
 
         var age = today.Year - donor.BirthDate.Year;
