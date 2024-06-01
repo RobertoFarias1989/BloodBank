@@ -1,9 +1,13 @@
-﻿using BloodBank.Core.Repositories;
+﻿using BloodBank.Application.Erros;
+using BloodBank.Core.Erros;
+using BloodBank.Core.Repositories;
+using BloodBank.Core.Results;
 using MediatR;
+using System.Net;
 
 namespace BloodBank.Application.Commands.DeleteBloodStock;
 
-public class DeleteBloodStockCommandHandler : IRequestHandler<DeleteBloodStockCommand, Unit>
+public class DeleteBloodStockCommandHandler : IRequestHandler<DeleteBloodStockCommand, Result>
 {
     private readonly IBloodStockRepository _bloodStockRepository;
 
@@ -12,11 +16,14 @@ public class DeleteBloodStockCommandHandler : IRequestHandler<DeleteBloodStockCo
         _bloodStockRepository = bloodStockRepository;
     }
 
-    public async Task<Unit> Handle(DeleteBloodStockCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(DeleteBloodStockCommand request, CancellationToken cancellationToken)
     {
         var bloodStock = await _bloodStockRepository.GetByIdAsync(request.Id);
 
-        if(bloodStock.IsActive == true)
+        if (bloodStock is null)
+            return Result.Fail(new HttpStatusCodeError(BloodStockErrors.NotFound, HttpStatusCode.NotFound));
+
+        if (bloodStock.IsActive == true)
         {
             bloodStock.Inactive();
 
@@ -24,10 +31,14 @@ public class DeleteBloodStockCommandHandler : IRequestHandler<DeleteBloodStockCo
         }
         else
         {
-            throw new Exception("BloodStock register is already inactived.");
+            //throw new Exception("BloodStock register is already inactived.");
+
+            //return Result.Fail(new HttpStatusCodeError(BloodStockErrors.AlreadyInactived, HttpStatusCode.BadRequest));
+
+            return Result.Fail(BloodStockErrors.AlreadyInactived);
         }
 
-        return Unit.Value;
+        return Result.Ok();
    
     }
 }

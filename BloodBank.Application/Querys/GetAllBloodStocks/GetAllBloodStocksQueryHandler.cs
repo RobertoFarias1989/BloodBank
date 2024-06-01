@@ -1,5 +1,4 @@
 ﻿using BloodBank.Application.ViewModels;
-using BloodBank.Core.Enums;
 using BloodBank.Core.Repositories;
 using MediatR;
 
@@ -19,10 +18,12 @@ public class GetAllBloodStocksQueryHandler : IRequestHandler<GetAllBloodStocksQu
         var bloodStock = await _bloodStockRepository.GetAllAsync();
 
         var bloodStockViewModel = bloodStock
-            .Select(bs=> new BloodStockViewModel(
+            .Select(bs => new BloodStockViewModel(
                 id:bs.Id,
                 bloodType: bs.BloodType.ToString(),
-                rHFactor: bs.RHFactor.ToString()))
+                rHFactor: bs.RHFactor.ToString(),
+                validateUntil: bs.ValidateUntil.ToShortDateString(),
+                idDonation: bs.IdDonation))
             .ToList();
 
         return bloodStockViewModel;

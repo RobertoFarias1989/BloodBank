@@ -1,11 +1,15 @@
-﻿using BloodBank.Core.Enums;
+﻿using BloodBank.Application.Erros;
+using BloodBank.Core.Enums;
+using BloodBank.Core.Erros;
 using BloodBank.Core.Repositories;
+using BloodBank.Core.Results;
 using BloodBank.Core.ValueObjects;
 using MediatR;
+using System.Net;
 
 namespace BloodBank.Application.Commands.UpdateDonor;
 
-public class UpdateDonorCommandHandler : IRequestHandler<UpdateDonorCommand, Unit>
+public class UpdateDonorCommandHandler : IRequestHandler<UpdateDonorCommand, Result>
 {
     private readonly IDonorRepository _donorRepository;
 
@@ -14,9 +18,12 @@ public class UpdateDonorCommandHandler : IRequestHandler<UpdateDonorCommand, Uni
         _donorRepository = donorRepository;
     }
 
-    public async Task<Unit> Handle(UpdateDonorCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(UpdateDonorCommand request, CancellationToken cancellationToken)
     {
         var donor = await _donorRepository.GetByIdAsync(request.Id);
+
+        if (donor is null)
+            return Result.Fail(new HttpStatusCodeError(DonorErrors.NotFound, HttpStatusCode.NotFound));
 
         donor.Update(
             name: new Name(request.FullName),
@@ -32,6 +39,6 @@ public class UpdateDonorCommandHandler : IRequestHandler<UpdateDonorCommand, Uni
 
         await _donorRepository.UpdateAsync(donor);
 
-        return Unit.Value;
+        return Result.Ok();
     }
 }

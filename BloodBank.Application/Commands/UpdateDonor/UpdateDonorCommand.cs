@@ -1,8 +1,9 @@
-﻿using MediatR;
+﻿using BloodBank.Core.Results;
+using MediatR;
 
 namespace BloodBank.Application.Commands.UpdateDonor;
 
-public class UpdateDonorCommand : IRequest<Unit>
+public class UpdateDonorCommand : IRequest<Result>
 {
     public int Id { get; set; }
     public string FullName { get; set; }

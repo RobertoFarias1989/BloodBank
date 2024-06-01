@@ -35,28 +35,32 @@ public class DonationsController : ControllerBase
     {
         var query = new GetDonationByIdQuery(id);
 
-        var donation = await _mediator.Send(query);
+        var result = await _mediator.Send(query);
 
-        if(donation == null)
-        {
-            return NotFound();
-        }
+        if(!result.Success)
+            return NotFound(result.Errors);
 
-        return Ok(donation);
+        return Ok(result);
     }
 
     [HttpPost]
     public async Task<IActionResult> Post([FromBody] CreateDonationCommand command)
     {
-        var id = await _mediator.Send(command);
+        var result = await _mediator.Send(command);
 
-        return CreatedAtAction(nameof(GetById), new {id = id}, command);
+        if (!result.Success)
+            return BadRequest(result.Errors);
+
+        return CreatedAtAction(nameof(GetById), new {id = result.Value}, command);
     }
 
     [HttpPut("{id}")]
     public async Task<IActionResult> Put(int id, [FromBody] UpdateDonationCommand command)
     {
-        await _mediator.Send(command);
+        var result =  await _mediator.Send(command);
+
+        if (!result.Success)
+            return BadRequest(result.Errors);
 
         return NoContent();
     }
@@ -66,7 +70,10 @@ public class DonationsController : ControllerBase
     {
         var command = new DeleteDonationCommand(id);
 
-        await _mediator.Send(command);
+        var result =  await _mediator.Send(command);
+
+        if (!result.Success)
+            return BadRequest(result.Errors);
 
         return NoContent();
     }

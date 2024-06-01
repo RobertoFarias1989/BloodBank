@@ -1,8 +1,9 @@
-﻿using MediatR;
+﻿using BloodBank.Core.Results;
+using MediatR;
 
 namespace BloodBank.Application.Commands.CreateDonor;
 
-public class CreateDonorCommand : IRequest<int>
+public class CreateDonorCommand : IRequest<Result<int>>
 {
     public string FullName { get;  set; }
     public string CPFNumber { get;  set; }

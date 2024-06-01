@@ -1,9 +1,13 @@
-﻿using BloodBank.Core.Repositories;
+﻿using BloodBank.Application.Erros;
+using BloodBank.Core.Erros;
+using BloodBank.Core.Repositories;
+using BloodBank.Core.Results;
 using MediatR;
+using System.Net;
 
 namespace BloodBank.Application.Commands.DeleteDonor;
 
-public class DeleteDonorCommandHandler : IRequestHandler<DeleteDonorCommand, Unit>
+public class DeleteDonorCommandHandler : IRequestHandler<DeleteDonorCommand, Result>
 {
     private readonly IDonorRepository _donorRepository;
 
@@ -12,9 +16,12 @@ public class DeleteDonorCommandHandler : IRequestHandler<DeleteDonorCommand, Uni
         _donorRepository = donorRepository;
     }
 
-    public async Task<Unit> Handle(DeleteDonorCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(DeleteDonorCommand request, CancellationToken cancellationToken)
     {
         var donor = await _donorRepository.GetByIdAsync(request.Id);
+
+        if (donor is null)
+            return Result.Fail(new HttpStatusCodeError(DonorErrors.NotFound, HttpStatusCode.NotFound));
 
         if(donor.IsActive == true)
         {
@@ -24,9 +31,11 @@ public class DeleteDonorCommandHandler : IRequestHandler<DeleteDonorCommand, Uni
         }
         else
         {
-            throw new Exception("The donor is already inactived.");
+            //throw new Exception("The donor is already inactived.");
+
+            return Result.Fail(DonorErrors.AlreadyInactived);
         }
 
-        return Unit.Value;
+        return Result.Ok();
     }
 }

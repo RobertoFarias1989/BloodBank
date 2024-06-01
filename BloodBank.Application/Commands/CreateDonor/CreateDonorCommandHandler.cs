@@ -1,12 +1,13 @@
 ﻿using BloodBank.Core.Entities;
 using BloodBank.Core.Enums;
 using BloodBank.Core.Repositories;
+using BloodBank.Core.Results;
 using BloodBank.Core.ValueObjects;
 using MediatR;
 
 namespace BloodBank.Application.Commands.CreateDonor;
 
-public class CreateDonorCommandHandler : IRequestHandler<CreateDonorCommand, int>
+public class CreateDonorCommandHandler : IRequestHandler<CreateDonorCommand, Result<int>>
 {
     private readonly IDonorRepository _donorRepository;
 
@@ -15,7 +16,7 @@ public class CreateDonorCommandHandler : IRequestHandler<CreateDonorCommand, int
         _donorRepository = donorRepository;
     }
 
-    public async Task<int> Handle(CreateDonorCommand request, CancellationToken cancellationToken)
+    public async Task<Result<int>> Handle(CreateDonorCommand request, CancellationToken cancellationToken)
     {
         var donor = new Donor(
             name:new Name( request.FullName),
@@ -31,6 +32,6 @@ public class CreateDonorCommandHandler : IRequestHandler<CreateDonorCommand, int
 
         await _donorRepository.AddAsync(donor);
 
-        return donor.Id;
+        return Result.Ok(donor.Id);
     }
 }

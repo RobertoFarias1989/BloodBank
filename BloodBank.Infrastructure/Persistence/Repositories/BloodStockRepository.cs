@@ -1,4 +1,5 @@
 ﻿using BloodBank.Core.Entities;
+using BloodBank.Core.Enums;
 using BloodBank.Core.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,7 +29,7 @@ public class BloodStockRepository : IBloodStockRepository
         return await _dbContext
             .BloodStocks
             .AsNoTracking()
-            .SingleOrDefaultAsync(b => b.Id == id);
+            .SingleOrDefaultAsync(b => b.IdDonation == id);
     }
 
     public async Task<BloodStock> GetDetailsById(int id)
@@ -37,6 +38,13 @@ public class BloodStockRepository : IBloodStockRepository
             .BloodStocks
             .AsNoTracking()
             .SingleOrDefaultAsync(b => b.Id == id);
+    }
+
+    public async Task<BloodStock> GetByIdAsync(BloodTypeEnum bloodType, RHFactorEnum factorRH)
+    {
+        return await _dbContext.BloodStocks
+            .AsNoTracking()
+            .SingleOrDefaultAsync(b => b.BloodType == bloodType && b.RHFactor == factorRH);
     }
 
     public async Task AddAsync(BloodStock bloodStock)

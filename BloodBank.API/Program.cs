@@ -1,6 +1,8 @@
 using BloodBank.API.Filters;
+using BloodBank.Application;
 using BloodBank.Application.Commands.CreateBloodStock;
 using BloodBank.Core.Repositories;
+using BloodBank.Infrastructure;
 using BloodBank.Infrastructure.Persistence;
 using BloodBank.Infrastructure.Persistence.Repositories;
 using FluentValidation.AspNetCore;
@@ -11,17 +13,22 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers(options => options.Filters.Add(typeof(ValidationFilter)))
-    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateBloodStockCommand>());
+builder.Services.AddControllers();
+builder.Services.AddApplication();
 
-var connectionString = builder.Configuration.GetConnectionString("BloodBank");
-builder.Services.AddDbContext<BloodBankDbContext>(options => options.UseSqlServer(connectionString));
+builder.Services.AddInfrastructure(builder.Configuration);
+
+//builder.Services.AddControllers(options => options.Filters.Add(typeof(ValidationFilter)))
+//    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateBloodStockCommand>());
+
+//var connectionString = builder.Configuration.GetConnectionString("BloodBank");
+//builder.Services.AddDbContext<BloodBankDbContext>(options => options.UseSqlServer(connectionString));
 
 
-builder.Services.AddMediatR(typeof(CreateBloodStockCommand));
-builder.Services.AddScoped<IBloodStockRepository, BloodStockRepository>();
-builder.Services.AddScoped<IDonationRepository, DonationRepository>();
-builder.Services.AddScoped<IDonorRepository, DonorRepository>();
+//builder.Services.AddMediatR(typeof(CreateBloodStockCommand));
+//builder.Services.AddScoped<IBloodStockRepository, BloodStockRepository>();
+//builder.Services.AddScoped<IDonationRepository, DonationRepository>();
+//builder.Services.AddScoped<IDonorRepository, DonorRepository>();
 
 
 

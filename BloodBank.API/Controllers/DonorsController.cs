@@ -35,14 +35,14 @@ public class DonorsController : ControllerBase
     {
         var query = new GetDonorByIdQuery(id);
 
-        var donor = await _mediator.Send(query);
+        var result = await _mediator.Send(query);
 
-        if(donor == null)
+        if(!result.Success)
         {
-            return NotFound();
+            return NotFound(result.Errors);
         }
 
-        return Ok(donor);
+        return Ok(result);
     }
 
     [HttpPost]

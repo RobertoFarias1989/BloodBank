@@ -38,6 +38,9 @@ namespace BloodBank.Infrastructure.Persistence.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime");
 
+                    b.Property<int>("IdDonation")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -51,6 +54,9 @@ namespace BloodBank.Infrastructure.Persistence.Migrations
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime");
+
+                    b.Property<DateTime>("ValidateUntil")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 

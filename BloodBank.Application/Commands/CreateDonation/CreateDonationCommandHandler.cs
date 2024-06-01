@@ -1,76 +1,76 @@
-﻿using BloodBank.Core.Entities;
+﻿using BloodBank.Application.Erros;
+using BloodBank.Core.Entities;
+using BloodBank.Core.Erros;
 using BloodBank.Core.Repositories;
+using BloodBank.Core.Results;
 using MediatR;
+using System.Net;
 
 namespace BloodBank.Application.Commands.CreateDonation;
 
-public class CreateDonationCommandHandler : IRequestHandler<CreateDonationCommand, int>
+public class CreateDonationCommandHandler : IRequestHandler<CreateDonationCommand, Result<int>>
 {
     private readonly IDonationRepository _donationRepository;
     private readonly IDonorRepository _donorRepository;
+    private readonly IBloodStockRepository _bloodStockRepository;
 
-    public CreateDonationCommandHandler(IDonationRepository donationRepository, IDonorRepository donorRepository)
+    public CreateDonationCommandHandler(IDonationRepository donationRepository, IDonorRepository donorRepository, IBloodStockRepository bloodStockRepository)
     {
         _donationRepository = donationRepository;
         _donorRepository = donorRepository;
+        _bloodStockRepository = bloodStockRepository;
     }
 
-    public async Task<int> Handle(CreateDonationCommand request, CancellationToken cancellationToken)
+    public async Task<Result<int>> Handle(CreateDonationCommand request, CancellationToken cancellationToken)
     {
         var donor = await _donorRepository.GetDetailsByIdAsync(request.IdDonor);
 
-        //Menor de idade não pode doar, mas pode ter cadastro.      
-        var today = DateTime.Today;
+        if (donor is null)           
+            return Result.Fail<int>(DonorErrors.NotFound);
 
-        var age = today.Year - donor.BirthDate.Year;
+        if (!donor.IsActive)
+            return Result.Fail<int>(DonorErrors.AlreadyInactived);
 
-        if (age < 16 && age > 69)
-            throw new Exception("You must have age between 16 and 69.");
 
+        //faça a validação de todas as regras de negócios relacionadas ao Donor:
+        //Menor de idade não pode doar, mas pode ter cadastro.
         //Pesar no mínimo 50KG.
-        if (donor.Weight < 50)
-            throw new Exception("You must have more than 50kg.");
-
         //Mulheres só podem doar de 90 em 90 dias.(PLUS)
-        if(donor.Gender == Core.Enums.GenderEnum.Female && donor.Donations != null)
-        {
-            var lastDonation = donor.Donations.OrderByDescending(dt => dt.Id).Select(dt => dt.DonationDate).First();
-
-            var diferrence = today - lastDonation;
-
-            var days = diferrence.Days;
-
-            if (days < 90)
-                throw new Exception("Women can only donate every 90 days.");
-        }
-
         //Homens só podem doar de 60 em 60 dias.
-        if (donor.Gender == Core.Enums.GenderEnum.Male && donor.Donations != null)
+        var donorResult =  donor.AmIAbleToGiveBlood(donor);
+
+        if (!donorResult.Success)
         {
-            var lastDonation = donor.Donations.OrderByDescending(dt => dt.Id).Select(dt => dt.DonationDate).First();
-
-            var diferrence = today - lastDonation;
-
-            var days = diferrence.Days;
-
-            if (days < 60)
-                throw new Exception("Men can only donate every 60 days.");
+            return Result.Fail<int>(donorResult.Errors);
         }
 
-        //Quantidade de mililitros de sangue doados deve ser entre 420ml e 470ml
-        if (request.QuantityML < 420 || request.QuantityML > 470)
-            throw new Exception("Number of milliliters of blood donated must be between 420ml and 470ml");
-
+        //Monto o objeto Donation
         var donationEntity = new Donation(
             quantityML: request.QuantityML,
             idDonor: request.IdDonor
             );
 
+        //Quantidade de mililitros de sangue doados deve ser entre 420ml e 470ml
+        var donationResult =  donationEntity.AmountMillimeterToDonate(request.QuantityML);
+
+        if (!donationResult.Success)
+        {
+            return Result.Fail<int>(donationResult.Errors);
+        }
+
+        //adiciono a doação
         await _donationRepository.AddAsync(donationEntity);
 
-        //TODO: criar ou atualizar BloodStock depois da doação
+        var bloodStockEntity = new BloodStock(
+            donor.BloodType,
+            donor.RHFactor,
+            donationEntity.QuantityML,
+            donationEntity.Id
+            );
 
-        return donationEntity.Id;
+        await _bloodStockRepository.AddAsync(bloodStockEntity);
+
+        return Result.Ok(donationEntity.Id);
 
     }
 }

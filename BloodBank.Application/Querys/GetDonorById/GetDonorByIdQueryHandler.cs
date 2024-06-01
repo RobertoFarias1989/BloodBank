@@ -1,10 +1,12 @@
 ﻿using BloodBank.Application.ViewModels;
+using BloodBank.Core.Erros;
 using BloodBank.Core.Repositories;
+using BloodBank.Core.Results;
 using MediatR;
 
 namespace BloodBank.Application.Querys.GetDonorById;
 
-public class GetDonorByIdQueryHandler : IRequestHandler<GetDonorByIdQuery, DonorDetailsViewModel>
+public class GetDonorByIdQueryHandler : IRequestHandler<GetDonorByIdQuery, Result<DonorDetailsViewModel>>
 {
     private readonly IDonorRepository _donorRepository;
 
@@ -13,11 +15,12 @@ public class GetDonorByIdQueryHandler : IRequestHandler<GetDonorByIdQuery, Donor
         _donorRepository = donorRepository;
     }
 
-    public async Task<DonorDetailsViewModel> Handle(GetDonorByIdQuery request, CancellationToken cancellationToken)
+    public async Task<Result<DonorDetailsViewModel>> Handle(GetDonorByIdQuery request, CancellationToken cancellationToken)
     {
         var donor = await _donorRepository.GetDetailsByIdAsync(request.Id);
 
-        if (donor == null) return null;
+        if (donor == null)
+            return Result.Fail<DonorDetailsViewModel>(DonorErrors.NotFound);
 
         var donations = donor.Donations
             .Where(dt => dt.IdDonor == donor.Id)
@@ -52,6 +55,6 @@ public class GetDonorByIdQueryHandler : IRequestHandler<GetDonorByIdQuery, Donor
             donations
             );
 
-        return donorDetailsViewModel;
+        return Result.Ok(donorDetailsViewModel);
     }
 }

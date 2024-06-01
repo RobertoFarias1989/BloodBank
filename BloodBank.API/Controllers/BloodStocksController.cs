@@ -3,6 +3,7 @@ using BloodBank.Application.Commands.DeleteBloodStock;
 using BloodBank.Application.Commands.UpdateBloodStock;
 using BloodBank.Application.Querys.GetAllBloodStocks;
 using BloodBank.Application.Querys.GetBloodStockByIdQuery;
+using BloodBank.Core.Results;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -34,14 +35,13 @@ public class BloodStocksController : ControllerBase
     {
         var query = new GetBloodStockByIdQuery(id);
 
-        var bloodStock = await _mediator.Send(query);
+        var result = await _mediator.Send(query);
 
-        if(bloodStock == null)
-        {
-            return NotFound();
-        }
+        if(!result.Success)
+            return NotFound(result.Errors);
 
-        return Ok(bloodStock);
+
+        return Ok(result);
     }
 
     [HttpPost]
@@ -55,7 +55,10 @@ public class BloodStocksController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> Put(int id, [FromBody] UpdateBloodStockCommand command)
     {
-        await _mediator.Send(command);
+        var result = await _mediator.Send(command);
+
+        if(!result.Success)
+            return NotFound(result.Errors);
 
         return NoContent();
     }
@@ -65,7 +68,10 @@ public class BloodStocksController : ControllerBase
     {
         var command = new DeleteBloodStockCommand(id);
 
-        await _mediator.Send(command);
+        var result =  await _mediator.Send(command);
+
+        if (!result.Success)
+            return NotFound(result.Errors);
 
         return NoContent();
     }

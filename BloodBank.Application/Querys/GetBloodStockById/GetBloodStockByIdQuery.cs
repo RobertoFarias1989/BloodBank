@@ -1,9 +1,10 @@
 ﻿using BloodBank.Application.ViewModels;
+using BloodBank.Core.Results;
 using MediatR;
 
 namespace BloodBank.Application.Querys.GetBloodStockByIdQuery;
 
-public class GetBloodStockByIdQuery : IRequest<BloodStockDetailsViewModel>
+public class GetBloodStockByIdQuery : IRequest<Result<BloodStockDetailsViewModel>>
 {
     public GetBloodStockByIdQuery(int id)
     {

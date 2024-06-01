@@ -1,4 +1,7 @@
-﻿namespace BloodBank.Core.Entities;
+﻿using BloodBank.Core.Erros;
+using BloodBank.Core.Results;
+
+namespace BloodBank.Core.Entities;
 
 public class Donation : BaseEntity
 {
@@ -29,6 +32,8 @@ public class Donation : BaseEntity
     public void UpdateML(int quantityML)
     {
         QuantityML = quantityML;
+
+        UpdatedAt = DateTime.Now;
     }
 
     public  void Inactive()
@@ -39,11 +44,14 @@ public class Donation : BaseEntity
         UpdatedAt = DateTime.Now;
     }
 
-    public void AmountMillimeterToDonate(int quantityML)
+    public Result AmountMillimeterToDonate(int quantityML)
     {
         //Quantidade de mililitros de sangue doados deve ser entre 420ml e 470ml
         if (quantityML < MinimumML || quantityML > MaximumML)
-            throw new Exception("Number of milliliters of blood donated must be between 420ml and 470ml");
+            //throw new Exception("Number of milliliters of blood donated must be between 420ml and 470ml");
+            return Result.Fail(DonationErrors.MinumumMLDonate);
+
+        return Result.Ok();
     }
 
 }

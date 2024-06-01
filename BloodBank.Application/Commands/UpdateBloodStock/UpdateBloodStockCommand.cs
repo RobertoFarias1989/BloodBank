@@ -1,8 +1,9 @@
-﻿using MediatR;
+﻿using BloodBank.Core.Results;
+using MediatR;
 
 namespace BloodBank.Application.Commands.UpdateBloodStock;
 
-public class UpdateBloodStockCommand : IRequest<Unit>
+public class UpdateBloodStockCommand : IRequest<Result>
 {
     public int Id { get; set; }
     public string BloodType { get; set; }

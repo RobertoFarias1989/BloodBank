@@ -1,4 +1,6 @@
 ﻿using BloodBank.Core.Enums;
+using BloodBank.Core.Erros;
+using BloodBank.Core.Results;
 using BloodBank.Core.ValueObjects;
 using System.Drawing;
 
@@ -97,7 +99,7 @@ public class Donor : BaseEntity
             throw new Exception("You must have more than 50kg.");
     }
 
-    public void AmIAbleToGiveBlood(Donor donor)
+    public Result AmIAbleToGiveBlood(Donor donor)
     {
         //Menor de idade não pode doar, mas pode ter cadastro.
         var today = DateTime.Today;
@@ -105,15 +107,16 @@ public class Donor : BaseEntity
         var age = today.Year - donor.BirthDate.Year;
 
         if (age < MinimumAge && age > MaximumAge)
-            throw new Exception("You must have age between 16 and 69.");
+            //throw new Exception("You must have age between 16 and 69.");
+            return Result.Fail(DonorErrors.RangeAge);
 
         //Pesar no mínimo 50KG.
         if (donor.Weight < MinimumWeight)
-            throw new Exception("You must have more than 50kg.");
-
+            //throw new Exception("You must have more than 50kg.");
+            return Result.Fail(DonorErrors.MinimumWeight);
 
         //Mulheres só podem doar de 90 em 90 dias.(PLUS)
-        if (donor.Gender == GenderEnum.Female && donor.Donations != null)
+        if (donor.Gender == GenderEnum.Female && donor.Donations.Count() > 0)
         {
             var lastDonation = donor.Donations.OrderByDescending(dt => dt.Id).Select(dt => dt.DonationDate).First();
 
@@ -122,11 +125,12 @@ public class Donor : BaseEntity
             var days = diferrence.Days;
 
             if (days < 90)
-                throw new Exception("Women can only donate every 90 days.");
+                //throw new Exception("Women can only donate every 90 days.");
+                return Result.Fail(DonorErrors.WomenRangeDays);
         }
 
         //Homens só podem doar de 60 em 60 dias.
-        if (donor.Gender == GenderEnum.Male && donor.Donations != null)
+        if (donor.Gender == GenderEnum.Male && donor.Donations.Count() > 0)
         {
             var lastDonation = donor.Donations.OrderByDescending(dt => dt.Id).Select(dt => dt.DonationDate).First();
 
@@ -135,8 +139,11 @@ public class Donor : BaseEntity
             var days = diferrence.Days;
 
             if (days < 60)
-                throw new Exception("Men can only donate every 60 days.");
+                //throw new Exception("Men can only donate every 60 days.");
+                return Result.Fail(DonorErrors.MenRangeDays);
         }
+
+        return Result.Ok();
     }
 
 }

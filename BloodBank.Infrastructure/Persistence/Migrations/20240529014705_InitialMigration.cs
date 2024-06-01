@@ -18,6 +18,8 @@ namespace BloodBank.Infrastructure.Persistence.Migrations
                     BloodType = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     RHFactor = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     QuantityML = table.Column<int>(type: "int", nullable: false),
+                    ValidateUntil = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IdDonation = table.Column<int>(type: "int", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime", nullable: true)

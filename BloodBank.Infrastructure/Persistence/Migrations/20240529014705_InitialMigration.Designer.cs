@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BloodBank.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(BloodBankDbContext))]
-    [Migration("20240526144012_InitialMigration")]
+    [Migration("20240529014705_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,6 +40,9 @@ namespace BloodBank.Infrastructure.Persistence.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime");
 
+                    b.Property<int>("IdDonation")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -53,6 +56,9 @@ namespace BloodBank.Infrastructure.Persistence.Migrations
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime");
+
+                    b.Property<DateTime>("ValidateUntil")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 

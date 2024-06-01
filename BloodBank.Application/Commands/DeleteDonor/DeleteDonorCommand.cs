@@ -1,8 +1,9 @@
-﻿using MediatR;
+﻿using BloodBank.Core.Results;
+using MediatR;
 
 namespace BloodBank.Application.Commands.DeleteDonor;
 
-public class DeleteDonorCommand : IRequest<Unit>
+public class DeleteDonorCommand : IRequest<Result>
 {
     public DeleteDonorCommand(int id)
     {
