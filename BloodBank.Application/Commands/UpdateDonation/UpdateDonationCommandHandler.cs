@@ -7,9 +7,6 @@ namespace BloodBank.Application.Commands.UpdateDonation;
 
 public class UpdateDonationCommandHandler : IRequestHandler<UpdateDonationCommand, Result>
 {
-    private readonly IDonationRepository _donationRepository;
-    private readonly IBloodStockRepository _bloodStockRepository;
-    private readonly IDonorRepository _donorRepository;
     private readonly IUnitOfWork _unitOfWork;
 
     public UpdateDonationCommandHandler(IUnitOfWork unitOfWork)
