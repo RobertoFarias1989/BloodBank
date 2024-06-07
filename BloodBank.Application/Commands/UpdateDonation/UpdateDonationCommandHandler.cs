@@ -12,17 +12,16 @@ public class UpdateDonationCommandHandler : IRequestHandler<UpdateDonationComman
     private readonly IDonationRepository _donationRepository;
     private readonly IBloodStockRepository _bloodStockRepository;
     private readonly IDonorRepository _donorRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public UpdateDonationCommandHandler(IDonationRepository donationRepository, IBloodStockRepository bloodStockRepository, IDonorRepository donorRepository)
+    public UpdateDonationCommandHandler(IUnitOfWork unitOfWork)
     {
-        _donationRepository = donationRepository;
-        _bloodStockRepository = bloodStockRepository;
-        _donorRepository = donorRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Result> Handle(UpdateDonationCommand request, CancellationToken cancellationToken)
     {
-        var donation = await _donationRepository.GetByIdAsync(request.Id);
+        var donation = await _unitOfWork.DonationRepository.GetByIdAsync(request.Id);
 
         if (donation is null)
             return Result.Fail(DonationErrors.NotFound);
@@ -37,16 +36,20 @@ public class UpdateDonationCommandHandler : IRequestHandler<UpdateDonationComman
 
         donation.UpdateML(request.QuantityML);        
 
-        await _donationRepository.UpdateAsync(donation);
+        await _unitOfWork.DonationRepository.UpdateAsync(donation);
 
-        var bloodStook = await _bloodStockRepository.GetByIdAsync(donation.Id);
+        await _unitOfWork.CompletAsync();
+
+        var bloodStook = await _unitOfWork.BloodStockRepository.GetByIdAsync(donation.Id);
 
         if (bloodStook is null)
             return Result.Fail(new HttpStatusCodeError(BloodStockErrors.NotFound, HttpStatusCode.NotFound));
 
         bloodStook.UpdateAmount(donation.QuantityML);
 
-        await _bloodStockRepository.UpdateAsync(bloodStook);
+        await _unitOfWork.BloodStockRepository.UpdateAsync(bloodStook);
+
+        await _unitOfWork.CompletAsync();
 
         return Result.Ok();
     }

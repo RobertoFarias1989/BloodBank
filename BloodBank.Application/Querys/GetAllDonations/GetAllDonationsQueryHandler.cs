@@ -6,16 +6,17 @@ namespace BloodBank.Application.Querys.GetAllDonations;
 
 public class GetAllDonationsQueryHandler : IRequestHandler<GetAllDonationsQuery, List<DonationViewModel>>
 {
-    private readonly IDonationRepository _donationRepository;
+ 
+    private readonly IUnitOfWork _unitOfWork;
 
-    public GetAllDonationsQueryHandler(IDonationRepository donationRepository)
+    public GetAllDonationsQueryHandler(IUnitOfWork unitOfWork)
     {
-        _donationRepository = donationRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<List<DonationViewModel>> Handle(GetAllDonationsQuery request, CancellationToken cancellationToken)
     {
-        var donations = await _donationRepository.GetAllAsync();
+        var donations = await _unitOfWork.DonationRepository.GetAllAsync();
 
         var donationViewModel = donations
             .Select(dt => new DonationViewModel(

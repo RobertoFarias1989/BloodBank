@@ -9,16 +9,17 @@ namespace BloodBank.Application.Commands.DeleteDonation;
 
 public class DeleteDonationCommandHandler : IRequestHandler<DeleteDonationCommand, Result>
 {
-    private readonly IDonationRepository _donationRepository;
+    
+    private readonly IUnitOfWork _unitOfWork;
 
-    public DeleteDonationCommandHandler(IDonationRepository donationRepository)
+    public DeleteDonationCommandHandler(IUnitOfWork unitOfWork)
     {
-        _donationRepository = donationRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Result> Handle(DeleteDonationCommand request, CancellationToken cancellationToken)
     {
-        var donation = await _donationRepository.GetByIdAsync(request.Id);
+        var donation = await _unitOfWork.DonorRepository.GetByIdAsync(request.Id);
 
         if(donation is null)
             return Result.Fail(DonationErrors.NotFound);
@@ -27,7 +28,9 @@ public class DeleteDonationCommandHandler : IRequestHandler<DeleteDonationComman
         {
             donation.Inactive();
 
-            await _donationRepository.UpdateAsync(donation);
+            await _unitOfWork.DonorRepository.UpdateAsync(donation);
+
+            await _unitOfWork.CompletAsync();
         }
         else
         {

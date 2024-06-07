@@ -9,16 +9,17 @@ namespace BloodBank.Application.Commands.DeleteDonor;
 
 public class DeleteDonorCommandHandler : IRequestHandler<DeleteDonorCommand, Result>
 {
-    private readonly IDonorRepository _donorRepository;
+    
+    private readonly IUnitOfWork _unitOfWork;
 
-    public DeleteDonorCommandHandler(IDonorRepository donorRepository)
+    public DeleteDonorCommandHandler(IUnitOfWork unitOfWork)
     {
-        _donorRepository = donorRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Result> Handle(DeleteDonorCommand request, CancellationToken cancellationToken)
     {
-        var donor = await _donorRepository.GetByIdAsync(request.Id);
+        var donor = await _unitOfWork.DonorRepository.GetByIdAsync(request.Id);
 
         if (donor is null)
             return Result.Fail(new HttpStatusCodeError(DonorErrors.NotFound, HttpStatusCode.NotFound));
@@ -27,12 +28,13 @@ public class DeleteDonorCommandHandler : IRequestHandler<DeleteDonorCommand, Res
         {
             donor.Inactive();
 
-            await _donorRepository.UpdateAsync(donor);
+            await _unitOfWork.DonorRepository.UpdateAsync(donor);
+
+            await _unitOfWork.CompletAsync();
         }
         else
         {
-            //throw new Exception("The donor is already inactived.");
-
+     
             return Result.Fail(DonorErrors.AlreadyInactived);
         }
 

@@ -10,20 +10,17 @@ namespace BloodBank.Application.Commands.CreateDonation;
 
 public class CreateDonationCommandHandler : IRequestHandler<CreateDonationCommand, Result<int>>
 {
-    private readonly IDonationRepository _donationRepository;
-    private readonly IDonorRepository _donorRepository;
-    private readonly IBloodStockRepository _bloodStockRepository;
 
-    public CreateDonationCommandHandler(IDonationRepository donationRepository, IDonorRepository donorRepository, IBloodStockRepository bloodStockRepository)
+    private readonly IUnitOfWork _unitOfWork;
+
+    public CreateDonationCommandHandler(IUnitOfWork unitOfWork)
     {
-        _donationRepository = donationRepository;
-        _donorRepository = donorRepository;
-        _bloodStockRepository = bloodStockRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Result<int>> Handle(CreateDonationCommand request, CancellationToken cancellationToken)
     {
-        var donor = await _donorRepository.GetDetailsByIdAsync(request.IdDonor);
+        var donor = await _unitOfWork.DonorRepository.GetDetailsByIdAsync(request.IdDonor);
 
         if (donor is null)           
             return Result.Fail<int>(DonorErrors.NotFound);
@@ -58,8 +55,12 @@ public class CreateDonationCommandHandler : IRequestHandler<CreateDonationComman
             return Result.Fail<int>(donationResult.Errors);
         }
 
+        await _unitOfWork.BeginTransactionAsync();
+
         //adiciono a doação
-        await _donationRepository.AddAsync(donationEntity);
+        await _unitOfWork.DonationRepository.AddAsync(donationEntity);
+
+        await _unitOfWork.CompletAsync();
 
         var bloodStockEntity = new BloodStock(
             donor.BloodType,
@@ -68,7 +69,11 @@ public class CreateDonationCommandHandler : IRequestHandler<CreateDonationComman
             donationEntity.Id
             );
 
-        await _bloodStockRepository.AddAsync(bloodStockEntity);
+        await _unitOfWork.BloodStockRepository.AddAsync(bloodStockEntity);
+
+        await _unitOfWork.CompletAsync();
+
+        await _unitOfWork.CommitAsync();
 
         return Result.Ok(donationEntity.Id);
 

@@ -18,21 +18,6 @@ builder.Services.AddApplication();
 
 builder.Services.AddInfrastructure(builder.Configuration);
 
-//builder.Services.AddControllers(options => options.Filters.Add(typeof(ValidationFilter)))
-//    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateBloodStockCommand>());
-
-//var connectionString = builder.Configuration.GetConnectionString("BloodBank");
-//builder.Services.AddDbContext<BloodBankDbContext>(options => options.UseSqlServer(connectionString));
-
-
-//builder.Services.AddMediatR(typeof(CreateBloodStockCommand));
-//builder.Services.AddScoped<IBloodStockRepository, BloodStockRepository>();
-//builder.Services.AddScoped<IDonationRepository, DonationRepository>();
-//builder.Services.AddScoped<IDonorRepository, DonorRepository>();
-
-
-
-
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

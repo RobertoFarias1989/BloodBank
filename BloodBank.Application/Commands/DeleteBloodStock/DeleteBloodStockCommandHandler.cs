@@ -9,25 +9,28 @@ namespace BloodBank.Application.Commands.DeleteBloodStock;
 
 public class DeleteBloodStockCommandHandler : IRequestHandler<DeleteBloodStockCommand, Result>
 {
-    private readonly IBloodStockRepository _bloodStockRepository;
+  
+    private readonly IUnitOfWork _unitOfWork;
 
-    public DeleteBloodStockCommandHandler(IBloodStockRepository bloodStockRepository)
+    public DeleteBloodStockCommandHandler(IUnitOfWork unitOfWork)
     {
-        _bloodStockRepository = bloodStockRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Result> Handle(DeleteBloodStockCommand request, CancellationToken cancellationToken)
     {
-        var bloodStock = await _bloodStockRepository.GetByIdAsync(request.Id);
+        var bloodStock = await _unitOfWork.BloodStockRepository.GetByIdAsync(request.Id);
 
         if (bloodStock is null)
-            return Result.Fail(new HttpStatusCodeError(BloodStockErrors.NotFound, HttpStatusCode.NotFound));
+            return Result.Fail(BloodStockErrors.NotFound);
 
         if (bloodStock.IsActive == true)
         {
             bloodStock.Inactive();
 
-            await _bloodStockRepository.UpdateAsync(bloodStock);
+            await _unitOfWork.BloodStockRepository.UpdateAsync(bloodStock);
+
+            await _unitOfWork.CompletAsync();
         }
         else
         {

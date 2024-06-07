@@ -9,11 +9,12 @@ namespace BloodBank.Application.Commands.CreateDonor;
 
 public class CreateDonorCommandHandler : IRequestHandler<CreateDonorCommand, Result<int>>
 {
-    private readonly IDonorRepository _donorRepository;
+   
+    private readonly IUnitOfWork _unitOfWork;
 
-    public CreateDonorCommandHandler(IDonorRepository donorRepository)
+    public CreateDonorCommandHandler(IUnitOfWork unitOfWork)
     {
-        _donorRepository = donorRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Result<int>> Handle(CreateDonorCommand request, CancellationToken cancellationToken)
@@ -30,7 +31,9 @@ public class CreateDonorCommandHandler : IRequestHandler<CreateDonorCommand, Res
             address: new Address(request.Street,request.City,request.State,request.PostalCode,request.Country)
             );
 
-        await _donorRepository.AddAsync(donor);
+        await _unitOfWork.DonorRepository.AddAsync(donor);
+
+        await _unitOfWork.CompletAsync();
 
         return Result.Ok(donor.Id);
     }

@@ -38,14 +38,14 @@ public class DonorRepository : IDonorRepository
     public async Task AddAsync(Donor donor)
     {
         await _dbContext.AddAsync(donor);
-        await SaveChangesAsync();
+        
         
     }
 
     public async Task UpdateAsync(Donor donor)
     {
         _dbContext.Donors.Update(donor);
-        await SaveChangesAsync();
+        
     }
 
     public async Task SaveChangesAsync()

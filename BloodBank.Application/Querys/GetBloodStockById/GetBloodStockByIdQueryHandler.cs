@@ -9,16 +9,17 @@ namespace BloodBank.Application.Querys.GetBloodStockByIdQuery;
 
 public class GetBloodStockByIdQueryHandler : IRequestHandler<GetBloodStockByIdQuery, Result<BloodStockDetailsViewModel>>
 {
-    private readonly IBloodStockRepository _bloodStockRepository;
+    
+    private readonly IUnitOfWork _unitOfWork;
 
-    public GetBloodStockByIdQueryHandler(IBloodStockRepository bloodStockRepository)
+    public GetBloodStockByIdQueryHandler(IUnitOfWork unitOfWork)
     {
-        _bloodStockRepository = bloodStockRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Result<BloodStockDetailsViewModel>> Handle(GetBloodStockByIdQuery request, CancellationToken cancellationToken)
     {
-        var bloodStock = await _bloodStockRepository.GetDetailsById(request.Id);
+        var bloodStock = await _unitOfWork.BloodStockRepository.GetDetailsById(request.Id);
 
         if (bloodStock == null)
             return Result.Fail<BloodStockDetailsViewModel>(BloodStockErrors.NotFound);

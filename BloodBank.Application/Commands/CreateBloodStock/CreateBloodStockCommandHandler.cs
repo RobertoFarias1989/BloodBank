@@ -8,11 +8,12 @@ namespace BloodBank.Application.Commands.CreateBloodStock;
 
 public class CreateBloodStockCommandHandler : IRequestHandler<CreateBloodStockCommand, Result<int>>
 {
-    private readonly IBloodStockRepository _bloodStockRepository;
+  
+    private readonly IUnitOfWork _unitOfWork;
 
-    public CreateBloodStockCommandHandler(IBloodStockRepository bloodStockRepository)
+    public CreateBloodStockCommandHandler(IUnitOfWork unitOfWork)
     {
-        _bloodStockRepository = bloodStockRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Result<int>> Handle(CreateBloodStockCommand request, CancellationToken cancellationToken)
@@ -24,7 +25,9 @@ public class CreateBloodStockCommandHandler : IRequestHandler<CreateBloodStockCo
             idDonation: request.IdDonation
             );
 
-        await _bloodStockRepository.AddAsync(bloodStock);
+        await _unitOfWork.BloodStockRepository.AddAsync(bloodStock);
+
+        await _unitOfWork.CompletAsync();
 
         return Result.Ok(bloodStock.Id);
     }

@@ -10,19 +10,20 @@ namespace BloodBank.Application.Commands.UpdateBloodStock;
 
 public class UpdateBloodStockCommandHandler : IRequestHandler<UpdateBloodStockCommand, Result>
 {
-    private readonly IBloodStockRepository _bloodStockRepository;
+   
+    private readonly IUnitOfWork _unitOfWork;
 
-    public UpdateBloodStockCommandHandler(IBloodStockRepository bloodStockRepository)
+    public UpdateBloodStockCommandHandler(IUnitOfWork unitOfWork)
     {
-        _bloodStockRepository = bloodStockRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Result> Handle(UpdateBloodStockCommand request, CancellationToken cancellationToken)
     {
-        var bloodStock = await _bloodStockRepository.GetByIdAsync(request.Id);
+        var bloodStock = await _unitOfWork.BloodStockRepository.GetByIdAsync(request.Id);
 
         if (bloodStock is null)
-            return Result.Fail(new HttpStatusCodeError(BloodStockErrors.NotFound, HttpStatusCode.NotFound));
+            return Result.Fail(BloodStockErrors.NotFound);
 
         bloodStock.Update(
             bloodType: (BloodTypeEnum)Enum.Parse(typeof(BloodTypeEnum), request.BloodType),
@@ -30,7 +31,9 @@ public class UpdateBloodStockCommandHandler : IRequestHandler<UpdateBloodStockCo
             quantityML: request.QuantityML
             );
 
-        await _bloodStockRepository.UpdateAsync(bloodStock);
+        await _unitOfWork.BloodStockRepository.UpdateAsync(bloodStock);
+
+        await _unitOfWork.CompletAsync();
 
         return Result.Ok();
     }

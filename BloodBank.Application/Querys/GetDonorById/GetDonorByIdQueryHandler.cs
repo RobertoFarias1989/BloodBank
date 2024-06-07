@@ -8,16 +8,17 @@ namespace BloodBank.Application.Querys.GetDonorById;
 
 public class GetDonorByIdQueryHandler : IRequestHandler<GetDonorByIdQuery, Result<DonorDetailsViewModel>>
 {
-    private readonly IDonorRepository _donorRepository;
+   
+    private readonly IUnitOfWork _unitOfWork;
 
-    public GetDonorByIdQueryHandler(IDonorRepository donorRepository)
+    public GetDonorByIdQueryHandler(IUnitOfWork unitOfWork)
     {
-        _donorRepository = donorRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Result<DonorDetailsViewModel>> Handle(GetDonorByIdQuery request, CancellationToken cancellationToken)
     {
-        var donor = await _donorRepository.GetDetailsByIdAsync(request.Id);
+        var donor = await _unitOfWork.DonorRepository.GetDetailsByIdAsync(request.Id);
 
         if (donor == null)
             return Result.Fail<DonorDetailsViewModel>(DonorErrors.NotFound);

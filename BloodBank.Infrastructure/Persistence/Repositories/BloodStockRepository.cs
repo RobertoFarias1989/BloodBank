@@ -50,7 +50,9 @@ public class BloodStockRepository : IBloodStockRepository
     public async Task AddAsync(BloodStock bloodStock)
     {
         await _dbContext.BloodStocks.AddAsync(bloodStock);
-        await SaveChangesAsync();
+
+        //Como agora estamos usando o UNitOfWork não é mais necessário chamarmos o SaveChanges aqui
+        //await SaveChangesAsync();
     }
 
     public async Task UpdateAsync(BloodStock bloodStock)
@@ -64,7 +66,7 @@ public class BloodStockRepository : IBloodStockRepository
         //para que assim as alterações seja persistidas pelo SaveChanges
         /*_dbContext.Entry(bloodStock).State = EntityState.Modified;*/
 
-        await SaveChangesAsync();
+        //await SaveChangesAsync();
     }
 
     public async Task SaveChangesAsync()

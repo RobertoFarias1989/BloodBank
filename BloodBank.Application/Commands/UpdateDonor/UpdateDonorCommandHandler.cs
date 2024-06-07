@@ -11,19 +11,20 @@ namespace BloodBank.Application.Commands.UpdateDonor;
 
 public class UpdateDonorCommandHandler : IRequestHandler<UpdateDonorCommand, Result>
 {
-    private readonly IDonorRepository _donorRepository;
+  
+    private readonly IUnitOfWork _unitOfWork;
 
-    public UpdateDonorCommandHandler(IDonorRepository donorRepository)
+    public UpdateDonorCommandHandler(IUnitOfWork unitOfWork)
     {
-        _donorRepository = donorRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Result> Handle(UpdateDonorCommand request, CancellationToken cancellationToken)
     {
-        var donor = await _donorRepository.GetByIdAsync(request.Id);
+        var donor = await _unitOfWork.DonorRepository.GetByIdAsync(request.Id);
 
         if (donor is null)
-            return Result.Fail(new HttpStatusCodeError(DonorErrors.NotFound, HttpStatusCode.NotFound));
+            return Result.Fail(DonorErrors.NotFound);
 
         donor.Update(
             name: new Name(request.FullName),
@@ -37,7 +38,9 @@ public class UpdateDonorCommandHandler : IRequestHandler<UpdateDonorCommand, Res
             address: new Address(request.Street,request.City, request.Street,request.PostalCode, request.Country)
             );
 
-        await _donorRepository.UpdateAsync(donor);
+        await _unitOfWork.DonorRepository.UpdateAsync(donor);
+
+        await _unitOfWork.CompletAsync();
 
         return Result.Ok();
     }
