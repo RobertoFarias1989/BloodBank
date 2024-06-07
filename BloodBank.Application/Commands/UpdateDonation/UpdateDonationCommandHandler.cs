@@ -1,9 +1,7 @@
-﻿using BloodBank.Application.Erros;
-using BloodBank.Core.Erros;
+﻿using BloodBank.Core.Erros;
 using BloodBank.Core.Repositories;
 using BloodBank.Core.Results;
 using MediatR;
-using System.Net;
 
 namespace BloodBank.Application.Commands.UpdateDonation;
 
@@ -43,7 +41,7 @@ public class UpdateDonationCommandHandler : IRequestHandler<UpdateDonationComman
         var bloodStook = await _unitOfWork.BloodStockRepository.GetByIdAsync(donation.Id);
 
         if (bloodStook is null)
-            return Result.Fail(new HttpStatusCodeError(BloodStockErrors.NotFound, HttpStatusCode.NotFound));
+            return Result.Fail(BloodStockErrors.NotFound);
 
         bloodStook.UpdateAmount(donation.QuantityML);
 

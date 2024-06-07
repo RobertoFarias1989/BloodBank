@@ -1,9 +1,7 @@
-﻿using BloodBank.Application.Erros;
-using BloodBank.Core.Erros;
+﻿using BloodBank.Core.Erros;
 using BloodBank.Core.Repositories;
 using BloodBank.Core.Results;
 using MediatR;
-using System.Net;
 
 namespace BloodBank.Application.Commands.DeleteDonor;
 
@@ -22,7 +20,7 @@ public class DeleteDonorCommandHandler : IRequestHandler<DeleteDonorCommand, Res
         var donor = await _unitOfWork.DonorRepository.GetByIdAsync(request.Id);
 
         if (donor is null)
-            return Result.Fail(new HttpStatusCodeError(DonorErrors.NotFound, HttpStatusCode.NotFound));
+            return Result.Fail(DonorErrors.NotFound);
 
         if(donor.IsActive == true)
         {

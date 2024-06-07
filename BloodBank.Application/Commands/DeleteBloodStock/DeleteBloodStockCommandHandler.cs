@@ -1,9 +1,7 @@
-﻿using BloodBank.Application.Erros;
-using BloodBank.Core.Erros;
+﻿using BloodBank.Core.Erros;
 using BloodBank.Core.Repositories;
 using BloodBank.Core.Results;
 using MediatR;
-using System.Net;
 
 namespace BloodBank.Application.Commands.DeleteBloodStock;
 
