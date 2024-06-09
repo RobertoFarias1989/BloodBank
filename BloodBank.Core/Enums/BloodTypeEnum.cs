@@ -1,10 +1,9 @@
-﻿namespace BloodBank.Core.Enums
+﻿namespace BloodBank.Core.Enums;
+
+public enum BloodTypeEnum
 {
-    public enum BloodTypeEnum
-    {
-        A = 0,
-        B = 1,
-        AB = 2,
-        O = 3,
-    }
+    A = 0,
+    B = 1,
+    AB = 2,
+    O = 3,
 }

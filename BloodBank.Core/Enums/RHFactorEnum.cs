@@ -1,8 +1,7 @@
-﻿namespace BloodBank.Core.Enums
+﻿namespace BloodBank.Core.Enums;
+
+public enum RHFactorEnum
 {
-    public enum RHFactorEnum
-    {
-        Positive = 0,
-        Negative = 1,
-    }
+    Positive = 0,
+    Negative = 1,
 }

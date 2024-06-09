@@ -1,10 +1,14 @@
 ﻿using BloodBank.Application.ViewModels;
 using MediatR;
 
-namespace BloodBank.Application.Querys.GetAllDonations
+namespace BloodBank.Application.Querys.GetAllDonations;
+
+public class GetAllDonationsQuery : IRequest<List<DonationViewModel>>
 {
-    public class GetAllDonationsQuery : IRequest<List<DonationViewModel>>
+    public GetAllDonationsQuery(string query)
     {
-        public string Query { get; private set; }
+        Query = query;
     }
+
+    public string Query { get; private set; }
 }

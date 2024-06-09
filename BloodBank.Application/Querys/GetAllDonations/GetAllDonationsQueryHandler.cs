@@ -2,20 +2,30 @@
 using BloodBank.Core.Repositories;
 using MediatR;
 
-namespace BloodBank.Application.Querys.GetAllDonations
+namespace BloodBank.Application.Querys.GetAllDonations;
+
+public class GetAllDonationsQueryHandler : IRequestHandler<GetAllDonationsQuery, List<DonationViewModel>>
 {
-    public class GetAllDonationsQueryHandler : IRequestHandler<GetAllDonationsQuery, List<DonationViewModel>>
+ 
+    private readonly IUnitOfWork _unitOfWork;
+
+    public GetAllDonationsQueryHandler(IUnitOfWork unitOfWork)
     {
-        private readonly IDonationRepository _donationRepository;
+        _unitOfWork = unitOfWork;
+    }
 
-        public GetAllDonationsQueryHandler(IDonationRepository donationRepository)
-        {
-            _donationRepository = donationRepository;
-        }
+    public async Task<List<DonationViewModel>> Handle(GetAllDonationsQuery request, CancellationToken cancellationToken)
+    {
+        var donations = await _unitOfWork.DonationRepository.GetAllAsync();
 
-        public Task<List<DonationViewModel>> Handle(GetAllDonationsQuery request, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
+        var donationViewModel = donations
+            .Select(dt => new DonationViewModel(
+                id: dt.Id,
+                donationDate: dt.DonationDate,
+                quantityML: dt.QuantityML,
+                idDonor: dt.IdDonor
+                )).ToList();
+
+        return donationViewModel;
     }
 }

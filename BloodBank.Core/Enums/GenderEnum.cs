@@ -1,9 +1,8 @@
-﻿namespace BloodBank.Core.Enums
+﻿namespace BloodBank.Core.Enums;
+
+public enum GenderEnum
 {
-    public enum GenderEnum
-    {
-        Male = 0,
-        Female = 1,
-        Other = 2,
-    }
+    Male = 0,
+    Female = 1,
+    Other = 2,
 }
