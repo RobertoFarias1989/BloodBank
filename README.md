@@ -35,6 +35,10 @@ AS
 		 BloodType
 		,RHFactor
 	ORDER BY BloodType
+
+Caso tenha alguma dúvida sobre o [Fast Report](https://www.fast-report.com/) você pode assistir a este vídeo o qual eu usei como base:
+
+https://www.youtube.com/watch?v=UvI-zeum5W4
  
 ---
 
