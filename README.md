@@ -74,6 +74,8 @@ https://www.youtube.com/watch?v=UvI-zeum5W4
 
 - Fast Reports (emissão de relatório)
 
+- Padrão Result
+
 - Paradigma de orientação a objetos
   
 - SQL Server
