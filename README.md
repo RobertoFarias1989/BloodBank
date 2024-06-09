@@ -10,6 +10,32 @@ Projeto desenvolvido como parte da mentoria .NET Start do [Metódo .NET](https:/
 
 Sistema de banco de dados de doação de sangue.
 
+Quando gerar o banco de dados será preciso criar a procedure abaixo pois é ela que irá rodar no Fast Report:
+
+![image](https://github.com/RobertoFarias1989/BloodBank/assets/118789432/b5cf164c-21fe-4970-bbd3-78d7a2a71c05)
+
+USE [BloodBank]
+GO
+/****** Object:  StoredProcedure [dbo].[SP_ReportBloodStock]    Script Date: 09/06/2024 17:48:59 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER PROCEDURE [dbo].[SP_ReportBloodStock]
+
+AS
+
+	SELECT 
+		 BloodType
+		,RHFactor
+		,Sum(QuantityML) AS QuantityML
+	FROM BloodStocks
+	WHERE IsActive <> 0
+	GROUP BY
+		 BloodType
+		,RHFactor
+	ORDER BY BloodType
+ 
 ---
 
 ## 💼 Regras de negócio
@@ -47,6 +73,8 @@ Sistema de banco de dados de doação de sangue.
 - Paradigma de orientação a objetos
   
 - SQL Server
+
+- T - SQL
 
 - Validação de APIs com FluentValidation
 
