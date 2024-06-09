@@ -1,4 +1,5 @@
-﻿using BloodBank.Application.Commands.CreateBloodStock;
+﻿using BloodBank.Application.Commands.ConsumeBloodStock;
+using BloodBank.Application.Commands.CreateBloodStock;
 using BloodBank.Application.Commands.DeleteBloodStock;
 using BloodBank.Application.Commands.UpdateBloodStock;
 using BloodBank.Application.Querys.GetAllBloodStocks;
@@ -41,7 +42,7 @@ public class BloodStocksController : ControllerBase
             return NotFound(result.Errors);
 
 
-        return Ok(result);
+        return Ok(result.Value);
     }
 
     [HttpPost]
@@ -58,6 +59,17 @@ public class BloodStocksController : ControllerBase
         var result = await _mediator.Send(command);
 
         if(!result.Success)
+            return NotFound(result.Errors);
+
+        return NoContent();
+    }
+
+    [HttpPut("{id}/consume")]
+    public async Task<IActionResult> ConsumeAmount(int id, [FromBody] ConsumeBloodStockCommand command)
+    {
+        var result = await _mediator.Send(command);
+
+        if (!result.Success)
             return NotFound(result.Errors);
 
         return NoContent();

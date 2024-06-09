@@ -40,7 +40,7 @@ public class DonationsController : ControllerBase
         if(!result.Success)
             return NotFound(result.Errors);
 
-        return Ok(result);
+        return Ok(result.Value);
     }
 
     [HttpPost]

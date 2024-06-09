@@ -42,7 +42,7 @@ public class DonorsController : ControllerBase
             return NotFound(result.Errors);
         }
 
-        return Ok(result);
+        return Ok(result.Value);
     }
 
     [HttpPost]

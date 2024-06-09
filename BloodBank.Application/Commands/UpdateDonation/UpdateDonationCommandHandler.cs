@@ -29,6 +29,8 @@ public class UpdateDonationCommandHandler : IRequestHandler<UpdateDonationComman
         if (!donationResult.Success)
             return Result.Fail(donationResult.Errors);
 
+        await _unitOfWork.BeginTransactionAsync();
+
         donation.UpdateML(request.QuantityML);        
 
         await _unitOfWork.DonationRepository.UpdateAsync(donation);
@@ -45,6 +47,8 @@ public class UpdateDonationCommandHandler : IRequestHandler<UpdateDonationComman
         await _unitOfWork.BloodStockRepository.UpdateAsync(bloodStook);
 
         await _unitOfWork.CompletAsync();
+
+        await _unitOfWork.CommitAsync();
 
         return Result.Ok();
     }

@@ -47,8 +47,7 @@ public class Donation : BaseEntity
     public Result AmountMillimeterToDonate(int quantityML)
     {
         //Quantidade de mililitros de sangue doados deve ser entre 420ml e 470ml
-        if (quantityML < MinimumML || quantityML > MaximumML)
-            //throw new Exception("Number of milliliters of blood donated must be between 420ml and 470ml");
+        if (quantityML < MinimumML || quantityML > MaximumML)           
             return Result.Fail(DonationErrors.MinumumMLDonate);
 
         return Result.Ok();

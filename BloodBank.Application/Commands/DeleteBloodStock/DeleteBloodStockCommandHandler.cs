@@ -32,9 +32,6 @@ public class DeleteBloodStockCommandHandler : IRequestHandler<DeleteBloodStockCo
         }
         else
         {
-            //throw new Exception("BloodStock register is already inactived.");
-
-            //return Result.Fail(new HttpStatusCodeError(BloodStockErrors.AlreadyInactived, HttpStatusCode.BadRequest));
 
             return Result.Fail(BloodStockErrors.AlreadyInactived);
         }

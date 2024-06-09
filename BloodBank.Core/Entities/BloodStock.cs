@@ -1,4 +1,6 @@
 ﻿using BloodBank.Core.Enums;
+using BloodBank.Core.Erros;
+using BloodBank.Core.Results;
 
 namespace BloodBank.Core.Entities;
 
@@ -48,6 +50,20 @@ public class BloodStock : BaseEntity
     public void IncreaseAmount(int quantityML)
     {
         QuantityML += quantityML;
+    }
+
+    public Result ConsumeAmount(int quantityML)
+    {
+        if (quantityML > QuantityML)
+        {
+            var errorMessage = $"{BloodStockErrors.NotEnoughAmount.Message} Available quantity for Donation {IdDonation} : {QuantityML} mL";
+            var customError = new Error(BloodStockErrors.NotEnoughAmount.Code, errorMessage);
+            return Result.Fail(customError);
+        }            
+
+        QuantityML -= quantityML;
+
+        return Result.Ok();
     }
 
     public void UpdateAmount(int quantityML)

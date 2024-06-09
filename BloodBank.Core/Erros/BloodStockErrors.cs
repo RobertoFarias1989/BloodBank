@@ -7,4 +7,7 @@ public static  class BloodStockErrors
 
     public static readonly Error AlreadyInactived = new(
             "BloodStock.AlreadyInactived", "The BloodStock is already inactived.");
+
+    public static readonly Error NotEnoughAmount = new(
+            "BloodStock.NotEnoughAmount", "There isn't enough amount to consume.");
 }

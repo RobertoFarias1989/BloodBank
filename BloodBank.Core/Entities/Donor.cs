@@ -55,6 +55,10 @@ public class Donor : BaseEntity
 
     private const int MinimumWeight = 50;
 
+    private const int IntervalDaysForWomen = 90;
+
+    private const int IntervalDaysForMen = 60;
+
 
     public void Update(Name name,
         CPF cpf,
@@ -106,13 +110,11 @@ public class Donor : BaseEntity
 
         var age = today.Year - donor.BirthDate.Year;
 
-        if (age < MinimumAge && age > MaximumAge)
-            //throw new Exception("You must have age between 16 and 69.");
+        if (age < MinimumAge && age > MaximumAge)            
             return Result.Fail(DonorErrors.RangeAge);
 
         //Pesar no mínimo 50KG.
-        if (donor.Weight < MinimumWeight)
-            //throw new Exception("You must have more than 50kg.");
+        if (donor.Weight < MinimumWeight)         
             return Result.Fail(DonorErrors.MinimumWeight);
 
         //Mulheres só podem doar de 90 em 90 dias.(PLUS)
@@ -124,8 +126,7 @@ public class Donor : BaseEntity
 
             var days = diferrence.Days;
 
-            if (days < 90)
-                //throw new Exception("Women can only donate every 90 days.");
+            if (days < IntervalDaysForWomen)                
                 return Result.Fail(DonorErrors.WomenRangeDays);
         }
 
@@ -138,8 +139,7 @@ public class Donor : BaseEntity
 
             var days = diferrence.Days;
 
-            if (days < 60)
-                //throw new Exception("Men can only donate every 60 days.");
+            if (days < IntervalDaysForMen)         
                 return Result.Fail(DonorErrors.MenRangeDays);
         }
 
