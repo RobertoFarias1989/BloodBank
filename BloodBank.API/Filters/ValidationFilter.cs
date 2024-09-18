@@ -15,7 +15,7 @@ public class ValidationFilter : IActionFilter
         if (!context.ModelState.IsValid)
         {
             var messages = context.ModelState
-                                  .SelectMany(ms => ms.Value.Errors)
+                                  .SelectMany(ms => ms.Value!.Errors)
                                   .Select(e => e.ErrorMessage)
                                   .ToList();
 
