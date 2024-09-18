@@ -1,4 +1,4 @@
-﻿using BloodBank.Application.Commands.CreateBloodStock;
+﻿using BloodBank.Application.BloodStock.Commands.CreateBloodStock;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;

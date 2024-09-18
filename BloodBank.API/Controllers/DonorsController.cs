@@ -1,10 +1,9 @@
-﻿using BloodBank.Application.Commands.CreateDonor;
-using BloodBank.Application.Commands.DeleteDonor;
-using BloodBank.Application.Commands.UpdateDonor;
-using BloodBank.Application.Querys.GetAllDonors;
-using BloodBank.Application.Querys.GetDonorById;
+﻿using BloodBank.Application.Donor.Commands.CreateDonor;
+using BloodBank.Application.Donor.Commands.DeleteDonor;
+using BloodBank.Application.Donor.Commands.UpdateDonor;
+using BloodBank.Application.Donor.Queries.GetAllDonors;
+using BloodBank.Application.Donor.Queries.GetDonorById;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BloodBank.API.Controllers;
