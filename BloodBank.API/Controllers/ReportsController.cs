@@ -1,6 +1,5 @@
-﻿using BloodBank.Application.Querys.GetAllBloodStocks;
-using BloodBank.Application.Querys.GetBloodStockReport;
-using BloodBank.Application.ViewModels;
+﻿using BloodBank.Application.BloodStock.Queries.GetBloodStockReport;
+using BloodBank.Application.BloodStock.ViewModels;
 using FastReport.Export.PdfSimple;
 using FastReport.Web;
 using MediatR;

@@ -1,10 +1,9 @@
-﻿using BloodBank.Application.Commands.ConsumeBloodStock;
-using BloodBank.Application.Commands.CreateBloodStock;
-using BloodBank.Application.Commands.DeleteBloodStock;
-using BloodBank.Application.Commands.UpdateBloodStock;
-using BloodBank.Application.Querys.GetAllBloodStocks;
-using BloodBank.Application.Querys.GetBloodStockByIdQuery;
-using BloodBank.Core.Results;
+﻿using BloodBank.Application.BloodStock.Commands.ConsumeBloodStock;
+using BloodBank.Application.BloodStock.Commands.CreateBloodStock;
+using BloodBank.Application.BloodStock.Commands.DeleteBloodStock;
+using BloodBank.Application.BloodStock.Commands.UpdateBloodStock;
+using BloodBank.Application.BloodStock.Queries.GetAllBloodStocks;
+using BloodBank.Application.BloodStock.Queries.GetBloodStockById;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
