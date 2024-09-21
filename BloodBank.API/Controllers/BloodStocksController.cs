@@ -45,7 +45,7 @@ public class BloodStocksController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Post([FromBody] CreateBloodStockCommand command)
+    public async Task<IActionResult> Post(CreateBloodStockCommand command)
     {
         var id = await _mediator.Send(command);
 
@@ -53,7 +53,7 @@ public class BloodStocksController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Put(int id, [FromBody] UpdateBloodStockCommand command)
+    public async Task<IActionResult> Put(int id, UpdateBloodStockCommand command)
     {
         var result = await _mediator.Send(command);
 
@@ -64,7 +64,7 @@ public class BloodStocksController : ControllerBase
     }
 
     [HttpPut("{id}/consume")]
-    public async Task<IActionResult> ConsumeAmount(int id, [FromBody] ConsumeBloodStockCommand command)
+    public async Task<IActionResult> ConsumeAmount(int id, ConsumeBloodStockCommand command)
     {
         var result = await _mediator.Send(command);
 
