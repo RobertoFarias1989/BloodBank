@@ -1,3 +1,4 @@
+using BloodBank.API.ExtensionMethods;
 using BloodBank.Application;
 using BloodBank.Infrastructure;
 using FastReport.Data;
@@ -27,6 +28,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.ConfigureExceptionHandler();
 
 app.UseHttpsRedirection();
 
