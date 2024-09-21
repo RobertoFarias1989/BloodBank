@@ -45,7 +45,7 @@ public class DonorsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Post([FromBody] CreateDonorCommand command)
+    public async Task<IActionResult> Post(CreateDonorCommand command)
     {
         var id = await _mediator.Send(command);
 
@@ -53,7 +53,7 @@ public class DonorsController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Put(int id, [FromBody] UpdateDonorCommand command)
+    public async Task<IActionResult> Put(int id, UpdateDonorCommand command)
     {
         await _mediator.Send(command);
 
