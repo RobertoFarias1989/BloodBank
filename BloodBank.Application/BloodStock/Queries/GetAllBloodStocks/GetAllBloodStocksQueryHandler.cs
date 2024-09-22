@@ -1,10 +1,11 @@
 ﻿using BloodBank.Application.BloodStock.ViewModels;
+using BloodBank.Core.Models;
 using BloodBank.Core.Repositories;
 using MediatR;
 
 namespace BloodBank.Application.BloodStock.Queries.GetAllBloodStocks;
 
-public class GetAllBloodStocksQueryHandler : IRequestHandler<GetAllBloodStocksQuery, List<BloodStockViewModel>>
+public class GetAllBloodStocksQueryHandler : IRequestHandler<GetAllBloodStocksQuery, PaginationResult<BloodStockViewModel>>
 {
 
     private readonly IUnitOfWork _unitOfWork;
@@ -14,11 +15,12 @@ public class GetAllBloodStocksQueryHandler : IRequestHandler<GetAllBloodStocksQu
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<List<BloodStockViewModel>> Handle(GetAllBloodStocksQuery request, CancellationToken cancellationToken)
+    public async Task<PaginationResult<BloodStockViewModel>> Handle(GetAllBloodStocksQuery request, CancellationToken cancellationToken)
     {
-        var bloodStock = await _unitOfWork.BloodStockRepository.GetAllAsync();
+        var paginationBloodStock = await _unitOfWork.BloodStockRepository.GetAllAsync(request.Query, request.Page);
 
-        var bloodStockViewModel = bloodStock
+        var bloodStockViewModel = paginationBloodStock
+            .Data
             .Select(bs => new BloodStockViewModel(
                 id: bs.Id,
                 bloodType: bs.BloodType.ToString(),
@@ -27,6 +29,13 @@ public class GetAllBloodStocksQueryHandler : IRequestHandler<GetAllBloodStocksQu
                 idDonation: bs.IdDonation))
             .ToList();
 
-        return bloodStockViewModel;
+        var paginationBloodStockViewModel = new PaginationResult<BloodStockViewModel>(
+                paginationBloodStock.Page,
+                paginationBloodStock.TotalPages,
+                paginationBloodStock.PageSize,
+                paginationBloodStock.ItemsCount,
+                bloodStockViewModel);
+
+        return paginationBloodStockViewModel;
     }
 }

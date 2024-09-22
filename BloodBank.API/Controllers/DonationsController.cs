@@ -28,9 +28,9 @@ public class DonationsController : ControllerBase
     [Authorize(Roles = "donor, manager")]
     [SwaggerOperation(Summary = "Obtém uma lista de Donations")]
     [ProducesResponseType(typeof(List<DonationViewModel>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> Get(string? query)
+    public async Task<IActionResult> Get(int page = 1)
     {
-        var getAllDonationsQuery = new GetAllDonationsQuery(query);
+        var getAllDonationsQuery = new GetAllDonationsQuery(page);
 
         var donations = await _mediator.Send(getAllDonationsQuery);
 

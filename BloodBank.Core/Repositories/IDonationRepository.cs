@@ -1,10 +1,11 @@
 ﻿using BloodBank.Core.Entities;
+using BloodBank.Core.Models;
 
 namespace BloodBank.Core.Repositories;
 
 public interface IDonationRepository
 {
-    Task<List<Donation>> GetAllAsync();
+    Task<PaginationResult<Donation>> GetAllAsync(int page = 1);
     Task<Donation?> GetByIdAsync(int id);
     Task<Donation?> GetDetailsByIdAsync(int id);
     Task AddAsync(Donation donation);

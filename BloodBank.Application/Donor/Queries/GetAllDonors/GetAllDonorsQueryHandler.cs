@@ -1,10 +1,11 @@
 ﻿using BloodBank.Application.Donor.ViewModels;
+using BloodBank.Core.Models;
 using BloodBank.Core.Repositories;
 using MediatR;
 
 namespace BloodBank.Application.Donor.Queries.GetAllDonors;
 
-public class GetAllDonorsQueryHandler : IRequestHandler<GetAllDonorsQuery, List<DonorViewModel>>
+public class GetAllDonorsQueryHandler : IRequestHandler<GetAllDonorsQuery, PaginationResult<DonorViewModel>>
 {
 
     private readonly IUnitOfWork _unitOfWork;
@@ -14,11 +15,12 @@ public class GetAllDonorsQueryHandler : IRequestHandler<GetAllDonorsQuery, List<
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<List<DonorViewModel>> Handle(GetAllDonorsQuery request, CancellationToken cancellationToken)
+    public async Task<PaginationResult<DonorViewModel>> Handle(GetAllDonorsQuery request, CancellationToken cancellationToken)
     {
-        var donor = await _unitOfWork.DonorRepository.GetAllAsync();
+        var paginationDonors = await _unitOfWork.DonorRepository.GetAllAsync(request.Query, request.Page);
 
-        var donorViewModel = donor
+        var donorViewModel = paginationDonors
+            .Data
             .Select(d => new DonorViewModel(
                 d.Id,
                 d.Name.FullName,
@@ -29,6 +31,13 @@ public class GetAllDonorsQueryHandler : IRequestHandler<GetAllDonorsQuery, List<
                 d.RHFactor.ToString()))
             .ToList();
 
-        return donorViewModel;
+        var paginationDonorsViewModel = new PaginationResult<DonorViewModel>(
+            paginationDonors.Page,
+                paginationDonors.TotalPages,
+                paginationDonors.PageSize,
+                paginationDonors.ItemsCount,
+                donorViewModel);
+
+        return paginationDonorsViewModel;
     }
 }
