@@ -92,23 +92,23 @@ public class Donor : BaseEntity
         UpdatedAt = DateTime.Now;
     }
 
-    public void AgeAvailable(DateTime birthDate)
-    {
-        //Menor de idade não pode doar, mas pode ter cadastro.
-        var today = DateTime.Today;
+    //public void AgeAvailable(DateTime birthDate)
+    //{
+    //    //Menor de idade não pode doar, mas pode ter cadastro.
+    //    var today = DateTime.Today;
 
-        var age = today.Year - birthDate.Year;
+    //    var age = today.Year - birthDate.Year;
 
-        if (age < MinimumAge && age > MaximumAge)
-            throw new Exception("You must have age between 16 and 69.");
-    }
+    //    if (age < MinimumAge && age > MaximumAge)
+    //        throw new Exception("You must have age between 16 and 69.");
+    //}
 
-    public void MinimunWeight(double weight)
-    {
-        //Pesar no mínimo 50KG.
-        if (weight < MinimumWeight)
-            throw new Exception("You must have more than 50kg.");
-    }
+    //public void MinimunWeight(double weight)
+    //{
+    //    //Pesar no mínimo 50KG.
+    //    if (weight < MinimumWeight)
+    //        throw new Exception("You must have more than 50kg.");
+    //}
 
     public Result AmIAbleToGiveBlood(Donor donor)
     {
