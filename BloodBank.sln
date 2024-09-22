@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BloodBank.Infrastructure", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BloodBank.Application", "BloodBank.Application\BloodBank.Application.csproj", "{853FAF7F-4E68-40D6-B32B-69E98419684A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BloodBank.API", "BloodBank.API\BloodBank.API.csproj", "{A7BA6275-35E8-4AC4-B546-8880DB930C67}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BloodBank.API", "BloodBank.API\BloodBank.API.csproj", "{A7BA6275-35E8-4AC4-B546-8880DB930C67}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BloodBank.UnitTests", "BloodBank.UnitTests\BloodBank.UnitTests.csproj", "{E1977516-0484-4DDE-A34B-A22D998030D8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{A7BA6275-35E8-4AC4-B546-8880DB930C67}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A7BA6275-35E8-4AC4-B546-8880DB930C67}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A7BA6275-35E8-4AC4-B546-8880DB930C67}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1977516-0484-4DDE-A34B-A22D998030D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1977516-0484-4DDE-A34B-A22D998030D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1977516-0484-4DDE-A34B-A22D998030D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1977516-0484-4DDE-A34B-A22D998030D8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
