@@ -29,9 +29,9 @@ public class BloodStocksController : ControllerBase
     [Authorize(Roles = "donor, manager")]
     [SwaggerOperation(Summary = "Obtém uma lista de BloodStock")]
     [ProducesResponseType(typeof(List<BloodStockViewModel>),StatusCodes.Status200OK)]
-    public async Task<IActionResult> Get(string? query)
+    public async Task<IActionResult> Get(string? query, int page = 1)
     {
-        var getAllBloodStocksQuery = new GetAllBloodStocksQuery(query!);
+        var getAllBloodStocksQuery = new GetAllBloodStocksQuery(query!, page);
 
         var bloodStock = await _mediator.Send(getAllBloodStocksQuery);
 

@@ -24,7 +24,7 @@ public class ReportsController : ControllerBase
     [Route("blood-stock")]
     [HttpGet]
     [SwaggerOperation(Summary = "Gera um Report sobre a quantidade de BloodStock")]
-    [ProducesResponseType(typeof(LoginCommand), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(BloodStockReportViewModel), StatusCodes.Status200OK)]
     public async Task<IActionResult> ReportBloodStock()
     {
         var getAllBloodStocksQuery = new GetBloodStockReportQuery();
