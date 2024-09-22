@@ -129,6 +129,11 @@ namespace BloodBank.Infrastructure.Persistence.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime");
 
@@ -259,6 +264,25 @@ namespace BloodBank.Infrastructure.Persistence.Migrations
                                 .HasForeignKey("DonorId");
                         });
 
+                    b.OwnsOne("BloodBank.Core.ValueObjects.Password", "Password", b1 =>
+                        {
+                            b1.Property<int>("DonorId")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("PasswordValue")
+                                .IsRequired()
+                                .HasMaxLength(100)
+                                .HasColumnType("nvarchar(100)")
+                                .HasColumnName("Password");
+
+                            b1.HasKey("DonorId");
+
+                            b1.ToTable("Donors");
+
+                            b1.WithOwner()
+                                .HasForeignKey("DonorId");
+                        });
+
                     b.Navigation("Address")
                         .IsRequired();
 
@@ -269,6 +293,9 @@ namespace BloodBank.Infrastructure.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Name")
+                        .IsRequired();
+
+                    b.Navigation("Password")
                         .IsRequired();
                 });
 

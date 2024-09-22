@@ -4,11 +4,13 @@ using BloodBank.Application.Donation.Commands.UpdateDonation;
 using BloodBank.Application.Donation.Queries.GetAllDonations;
 using BloodBank.Application.Donation.Queries.GetDonationById;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BloodBank.API.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/donations")]
+[Authorize]
 [ApiController]
 public class DonationsController : ControllerBase
 {
@@ -20,6 +22,7 @@ public class DonationsController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Roles = "donor, manager")]
     public async Task<IActionResult> Get(string? query)
     {
         var getAllDonationsQuery = new GetAllDonationsQuery(query);
@@ -30,6 +33,7 @@ public class DonationsController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [Authorize(Roles = "donor, manager")]
     public async Task<IActionResult> GetById(int id)
     {
         var query = new GetDonationByIdQuery(id);
@@ -43,6 +47,7 @@ public class DonationsController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "donor, manager")]
     public async Task<IActionResult> Post(CreateDonationCommand command)
     {
         var result = await _mediator.Send(command);
@@ -54,6 +59,7 @@ public class DonationsController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Roles = "donor, manager")]
     public async Task<IActionResult> Put(int id, UpdateDonationCommand command)
     {
         var result =  await _mediator.Send(command);
@@ -65,6 +71,7 @@ public class DonationsController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "donor, manager")]
     public async Task<IActionResult> Delete(int id)
     {
         var command = new DeleteDonationCommand(id);

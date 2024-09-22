@@ -1,6 +1,7 @@
 ﻿using BloodBank.Application.Donor.Commands.CreateDonor;
 using BloodBank.Core.Enums;
 using FluentValidation;
+using System.Text.RegularExpressions;
 
 namespace BloodBank.Application.Donor.Validators;
 
@@ -36,6 +37,25 @@ public class CreateDonorCommandValidator : AbstractValidator<CreateDonorCommand>
                 .WithMessage("A valid email address is required.")
             .MaximumLength(100)
                 .WithMessage("EmailAddress's maximum length is around 100 characters.");
+
+        RuleFor(u => u.PasswordValue)
+               .NotEmpty()
+                   .WithMessage("PasswordValue's field mustn't be empty.")
+               .NotNull()
+                   .WithMessage("PasswordValue's field mustn't be null.")
+               .MaximumLength(100)
+                   .WithMessage("PasswordValue's maximum length is around 100 characters.")
+               .Must(ValidPassword)
+                    .WithMessage("Password must contain at least 8 characters, a number," +
+              "one uppercase letter, one lowercase letter and one special character.");
+
+        RuleFor(u => u.Role)
+            .NotEmpty()
+                .WithMessage("Role's field mustn't be empty.")
+            .NotNull()
+                .WithMessage("Role's field mustn't be null.")
+            .MaximumLength(100)
+                .WithMessage("Role's maximum length is around 100 characters.");
 
         RuleFor(d => d.Gender)
           .NotEmpty()
@@ -161,4 +181,12 @@ public class CreateDonorCommandValidator : AbstractValidator<CreateDonorCommand>
 
         return true;
     }
+
+    public bool ValidPassword(string password)
+    {
+        var regex = new Regex(@"^.*(?=.{8,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!*@#$%^&+=]).*$");
+
+        return regex.IsMatch(password);
+    }
+
 }

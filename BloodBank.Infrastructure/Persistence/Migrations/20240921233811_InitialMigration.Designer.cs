@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BloodBank.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(BloodBankDbContext))]
-    [Migration("20240529014705_InitialMigration")]
+    [Migration("20240921233811_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -130,6 +130,11 @@ namespace BloodBank.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime");
@@ -261,6 +266,25 @@ namespace BloodBank.Infrastructure.Persistence.Migrations
                                 .HasForeignKey("DonorId");
                         });
 
+                    b.OwnsOne("BloodBank.Core.ValueObjects.Password", "Password", b1 =>
+                        {
+                            b1.Property<int>("DonorId")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("PasswordValue")
+                                .IsRequired()
+                                .HasMaxLength(100)
+                                .HasColumnType("nvarchar(100)")
+                                .HasColumnName("Password");
+
+                            b1.HasKey("DonorId");
+
+                            b1.ToTable("Donors");
+
+                            b1.WithOwner()
+                                .HasForeignKey("DonorId");
+                        });
+
                     b.Navigation("Address")
                         .IsRequired();
 
@@ -271,6 +295,9 @@ namespace BloodBank.Infrastructure.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Name")
+                        .IsRequired();
+
+                    b.Navigation("Password")
                         .IsRequired();
                 });
 

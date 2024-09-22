@@ -25,15 +25,16 @@ public class UpdateDonorCommandHandler : IRequestHandler<UpdateDonorCommand, Res
             return Result.Fail(DonorErrors.NotFound);
 
         donor.Update(
-            name: new Name(request.FullName),
-            cpf: new CPF(request.CPFNumber),
-            email: new Email(request.EmailAddress),
+            name: new Name(request.FullName!),
+            cpf: new CPF(request.CPFNumber!),
+            email: new Email(request.EmailAddress!),
             birthDate: request.BirthDate,
-            gender: (GenderEnum)Enum.Parse(typeof(GenderEnum), request.Gender),
+            gender: (GenderEnum)Enum.Parse(typeof(GenderEnum), request.Gender!),
             weight: request.Weight,
-            bloodType: (BloodTypeEnum)Enum.Parse(typeof(BloodTypeEnum), request.BloodType),
-            rHFactor: (RHFactorEnum)Enum.Parse(typeof(RHFactorEnum), request.RHFactor),
-            address: new Address(request.Street, request.City, request.Street, request.PostalCode, request.Country)
+            bloodType: (BloodTypeEnum)Enum.Parse(typeof(BloodTypeEnum), request.BloodType!),
+            rHFactor: (RHFactorEnum)Enum.Parse(typeof(RHFactorEnum), request.RHFactor!),
+            address: new Address(request.Street!, request.City!, request.Street!, request.PostalCode!, request.Country!),
+            password: new Password(request.PasswordValue!)
             );
 
         await _unitOfWork.DonorRepository.UpdateAsync(donor);

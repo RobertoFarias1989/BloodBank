@@ -8,7 +8,7 @@ using System.Data;
 
 namespace BloodBank.API.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/reports")]
 [ApiController]
 public class ReportsController : ControllerBase
 {

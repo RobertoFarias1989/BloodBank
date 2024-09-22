@@ -24,7 +24,7 @@ public class BloodStockRepository : IBloodStockRepository
         return await _dbContext.BloodStocks.AsNoTracking().ToListAsync();
     }
 
-    public async Task<BloodStock> GetByIdAsync(int id)
+    public async Task<BloodStock?> GetByIdAsync(int id)
     {
         return await _dbContext
             .BloodStocks
@@ -32,7 +32,7 @@ public class BloodStockRepository : IBloodStockRepository
             .SingleOrDefaultAsync(b => b.IdDonation == id);
     }
 
-    public async Task<BloodStock> GetDetailsById(int id)
+    public async Task<BloodStock?> GetDetailsById(int id)
     {
         return await _dbContext
             .BloodStocks
@@ -40,7 +40,7 @@ public class BloodStockRepository : IBloodStockRepository
             .SingleOrDefaultAsync(b => b.Id == id);
     }
 
-    public async Task<BloodStock> GetByIdAsync(BloodTypeEnum bloodType, RHFactorEnum factorRH)
+    public async Task<BloodStock?> GetByIdAsync(BloodTypeEnum bloodType, RHFactorEnum factorRH)
     {
         return await _dbContext.BloodStocks
             .AsNoTracking()

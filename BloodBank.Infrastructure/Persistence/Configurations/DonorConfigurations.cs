@@ -89,6 +89,16 @@ public class DonorConfigurations : BaseEntityConfigurations<Donor>
             });
 
         builder
+            .Property(d => d.Role)
+            .HasMaxLength(100);
+
+        builder
+            .OwnsOne(d => d.Password)
+            .Property(p => p.PasswordValue)
+            .HasColumnName("Password")
+            .HasMaxLength(100);
+
+        builder
             .OwnsOne(d => d.Email)
             .Property(d => d.EmailAddress)
             .HasColumnName("EmailAddress")
