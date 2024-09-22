@@ -4,15 +4,18 @@ using BloodBank.Application.BloodStock.Commands.DeleteBloodStock;
 using BloodBank.Application.BloodStock.Commands.UpdateBloodStock;
 using BloodBank.Application.BloodStock.Queries.GetAllBloodStocks;
 using BloodBank.Application.BloodStock.Queries.GetBloodStockById;
+using BloodBank.Application.BloodStock.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace BloodBank.API.Controllers;
 
 [Route("api/bloodstocks")]
 [Authorize]
 [ApiController]
+[Produces("application/json")]
 public class BloodStocksController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -24,9 +27,11 @@ public class BloodStocksController : ControllerBase
 
     [HttpGet]
     [Authorize(Roles = "donor, manager")]
+    [SwaggerOperation(Summary = "Obtém uma lista de BloodStock")]
+    [ProducesResponseType(typeof(List<BloodStockViewModel>),StatusCodes.Status200OK)]
     public async Task<IActionResult> Get(string? query)
     {
-        var getAllBloodStocksQuery = new GetAllBloodStocksQuery(query);
+        var getAllBloodStocksQuery = new GetAllBloodStocksQuery(query!);
 
         var bloodStock = await _mediator.Send(getAllBloodStocksQuery);
 
@@ -35,6 +40,9 @@ public class BloodStocksController : ControllerBase
 
     [HttpGet("{id}")]
     [Authorize(Roles = "donor, manager")]
+    [SwaggerOperation(Summary = "Obtém um BloodStock")]
+    [ProducesResponseType(typeof(List<BloodStockDetailsViewModel>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetById(int id)
     {
         var query = new GetBloodStockByIdQuery(id);
@@ -50,6 +58,9 @@ public class BloodStocksController : ControllerBase
 
     [HttpPost]
     [Authorize(Roles = "donor, manager")]
+    [SwaggerOperation(Summary = "Adiciona um BloodStock")]
+    [ProducesResponseType(typeof(CreateBloodStockCommand), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Post(CreateBloodStockCommand command)
     {
         var result = await _mediator.Send(command);
@@ -59,6 +70,9 @@ public class BloodStocksController : ControllerBase
 
     [HttpPut("{id}")]
     [Authorize(Roles = "donor, manager")]
+    [SwaggerOperation(Summary = "Atualiza os dados de um BloodStock")]
+    [ProducesResponseType(typeof(UpdateBloodStockCommand),StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Put(int id, UpdateBloodStockCommand command)
     {
         var result = await _mediator.Send(command);
@@ -71,6 +85,9 @@ public class BloodStocksController : ControllerBase
 
     [HttpPut("{id}/consume")]
     [Authorize(Roles = "donor, manager")]
+    [SwaggerOperation(Summary = "Atualiza a quantidade em estoque do BloodStock")]
+    [ProducesResponseType(typeof(UpdateBloodStockCommand), StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> ConsumeAmount(int id, ConsumeBloodStockCommand command)
     {
         var result = await _mediator.Send(command);
@@ -83,6 +100,9 @@ public class BloodStocksController : ControllerBase
 
     [HttpDelete("{id}")]
     [Authorize(Roles = "donor, manager")]
+    [SwaggerOperation(Summary = "Deleta logicamente um BloodStock")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(int id)
     {
         var command = new DeleteBloodStockCommand(id);
