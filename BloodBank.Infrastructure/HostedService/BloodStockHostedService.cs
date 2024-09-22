@@ -46,7 +46,7 @@ public class BloodStockHostedService : BackgroundService
 
                 foreach (var blood in bs)
                 {
-                    _email.SendEmail("bloodbank248@gmail.com"
+                    _email.SendEmail("INFORMEUMEMAILVALIDOAQUI248@gmail.com"
                         , "Warning: BloodStockLevel is very low."
                         , $"The amount of {blood.BloodType} {blood.RHFactor} is under {420}");
 
