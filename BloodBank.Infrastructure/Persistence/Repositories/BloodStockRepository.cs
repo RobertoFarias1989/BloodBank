@@ -1,6 +1,8 @@
 ﻿using BloodBank.Core.Entities;
 using BloodBank.Core.Enums;
+using BloodBank.Core.Models;
 using BloodBank.Core.Repositories;
+using BloodBank.Infrastructure.ExtensionMethods;
 using Microsoft.EntityFrameworkCore;
 
 namespace BloodBank.Infrastructure.Persistence.Repositories;
@@ -9,12 +11,28 @@ public class BloodStockRepository : IBloodStockRepository
 {
   
     private readonly BloodBankDbContext _dbContext;
+    private const int PAGE_SIZE = 2;
 
     public BloodStockRepository(BloodBankDbContext dbContext)
     {
         _dbContext = dbContext;
     }
 
+    public async Task<PaginationResult<BloodStock>> GetAllAsync(string query, int page)
+    {
+        IQueryable<BloodStock> bloodStocks = _dbContext.BloodStocks;
+
+        if (!string.IsNullOrWhiteSpace(query))
+        {
+            bloodStocks = bloodStocks
+                .Where(bs =>
+                    bs.RHFactor.ToString().Contains(query)
+                    || bs.BloodType.ToString().Contains(query));
+        }
+
+        return await bloodStocks.GetPaged<BloodStock>(page, PAGE_SIZE);
+
+    }
     public async Task<List<BloodStock>> GetAllAsync()
     {
         //Com o AsNoTracking ocorre a leitura da entidade mas não o seu armazenamento em cache
