@@ -19,7 +19,7 @@ public class DonationRepository : IDonationRepository
         return await _dbContext.Donations.AsNoTracking().ToListAsync();
     }
 
-    public async Task<Donation> GetByIdAsync(int id)
+    public async Task<Donation?> GetByIdAsync(int id)
     {
         return await _dbContext
             .Donations
@@ -27,7 +27,7 @@ public class DonationRepository : IDonationRepository
             .SingleOrDefaultAsync(d => d.Id == id);
     }
 
-    public async Task<Donation> GetDetailsByIdAsync(int id)
+    public async Task<Donation?> GetDetailsByIdAsync(int id)
     {
         return await _dbContext
             .Donations

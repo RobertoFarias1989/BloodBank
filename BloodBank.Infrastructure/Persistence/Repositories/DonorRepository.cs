@@ -19,7 +19,7 @@ public class DonorRepository : IDonorRepository
         return await _dbContext.Donors.AsNoTracking().ToListAsync();
     }
 
-    public async Task<Donor> GetByIdAsync(int id)
+    public async Task<Donor?> GetByIdAsync(int id)
     {
         return await _dbContext
             .Donors
@@ -27,7 +27,7 @@ public class DonorRepository : IDonorRepository
             .SingleOrDefaultAsync(d => d.Id == id);
     }
 
-    public async Task<Donor> GetDetailsByIdAsync(int id)
+    public async Task<Donor?> GetDetailsByIdAsync(int id)
     {
         return await _dbContext.Donors
             .Include(d=> d.Donations)
@@ -53,5 +53,9 @@ public class DonorRepository : IDonorRepository
         await _dbContext.SaveChangesAsync();
     }
 
-
+    public async Task<Donor?> GetDonorByEmailAndPassword(string email, string password)
+    {
+        return await _dbContext.Donors
+            .SingleOrDefaultAsync(d => d.Email.EmailAddress == email && d.Password.PasswordValue == password);
+    }
 }

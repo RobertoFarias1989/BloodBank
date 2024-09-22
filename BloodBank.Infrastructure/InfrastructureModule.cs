@@ -1,4 +1,5 @@
 ﻿using BloodBank.Core.Repositories;
+using BloodBank.Core.Services;
 using BloodBank.Infrastructure.EmailExtensions;
 using BloodBank.Infrastructure.HostedService;
 using BloodBank.Infrastructure.Persistence;
@@ -17,7 +18,9 @@ public static class InfrastructureModule
             .AddDbContexts(configuration)
             .AddUnitOfWork()
             .AddHostedService<BloodStockHostedService>()
-            .AddSingleton<IEmail,Email>();
+            .AddSingleton<IEmail,Email>()
+            .AddAuthService();
+
 
         return services;
     }
@@ -33,7 +36,7 @@ public static class InfrastructureModule
 
     private static IServiceCollection AddDbContexts(this IServiceCollection services, IConfiguration configuration)
     {
-        var connectionString = configuration.GetConnectionString("BloodBank");
+        var connectionString = configuration.GetConnectionString("BloodBankCs");
 
         services.AddDbContext<BloodBankDbContext>(options => options.UseSqlServer(connectionString));
 
@@ -43,6 +46,13 @@ public static class InfrastructureModule
     private static IServiceCollection AddUnitOfWork(this IServiceCollection services)
     {
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+        return services;
+    }
+
+    public static IServiceCollection AddAuthService(this IServiceCollection services)
+    {
+        services.AddScoped<IAuthService, AuthService.AuthService>();
 
         return services;
     }
