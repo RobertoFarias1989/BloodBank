@@ -1,6 +1,7 @@
 ﻿using BloodBank.Application.Donor.Commands.UpdateDonor;
 using BloodBank.Core.Enums;
 using FluentValidation;
+using System.Text.RegularExpressions;
 
 namespace BloodBank.Application.Donor.Validators;
 
@@ -36,6 +37,17 @@ public class UpdateDonorCommandValidator : AbstractValidator<UpdateDonorCommand>
                 .WithMessage("A valid email address is required.")
             .MaximumLength(100)
                 .WithMessage("EmailAddress's maximum length is around 100 characters.");
+
+        RuleFor(u => u.PasswordValue)
+               .NotEmpty()
+                   .WithMessage("PasswordValue's field mustn't be empty.")
+               .NotNull()
+                   .WithMessage("PasswordValue's field mustn't be null.")
+               .MaximumLength(100)
+                   .WithMessage("PasswordValue's maximum length is around 100 characters.")
+               .Must(ValidPassword)
+                    .WithMessage("Password must contain at least 8 characters, a number," +
+              "one uppercase letter, one lowercase letter and one special character.");
 
         RuleFor(d => d.Gender)
           .NotEmpty()
@@ -161,4 +173,12 @@ public class UpdateDonorCommandValidator : AbstractValidator<UpdateDonorCommand>
 
         return true;
     }
+
+    public bool ValidPassword(string password)
+    {
+        var regex = new Regex(@"^.*(?=.{8,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!*@#$%^&+=]).*$");
+
+        return regex.IsMatch(password);
+    }
+
 }

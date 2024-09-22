@@ -5,11 +5,13 @@ using BloodBank.Application.BloodStock.Commands.UpdateBloodStock;
 using BloodBank.Application.BloodStock.Queries.GetAllBloodStocks;
 using BloodBank.Application.BloodStock.Queries.GetBloodStockById;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BloodBank.API.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/bloodstocks")]
+[Authorize]
 [ApiController]
 public class BloodStocksController : ControllerBase
 {
@@ -21,6 +23,7 @@ public class BloodStocksController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Roles = "donor, manager")]
     public async Task<IActionResult> Get(string? query)
     {
         var getAllBloodStocksQuery = new GetAllBloodStocksQuery(query);
@@ -31,6 +34,7 @@ public class BloodStocksController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [Authorize(Roles = "donor, manager")]
     public async Task<IActionResult> GetById(int id)
     {
         var query = new GetBloodStockByIdQuery(id);
@@ -45,14 +49,16 @@ public class BloodStocksController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "donor, manager")]
     public async Task<IActionResult> Post(CreateBloodStockCommand command)
     {
-        var id = await _mediator.Send(command);
+        var result = await _mediator.Send(command);
 
-        return CreatedAtAction(nameof(GetById), new { id = id }, command);
+        return CreatedAtAction(nameof(GetById), new { id = result.Value }, command);
     }
 
     [HttpPut("{id}")]
+    [Authorize(Roles = "donor, manager")]
     public async Task<IActionResult> Put(int id, UpdateBloodStockCommand command)
     {
         var result = await _mediator.Send(command);
@@ -64,6 +70,7 @@ public class BloodStocksController : ControllerBase
     }
 
     [HttpPut("{id}/consume")]
+    [Authorize(Roles = "donor, manager")]
     public async Task<IActionResult> ConsumeAmount(int id, ConsumeBloodStockCommand command)
     {
         var result = await _mediator.Send(command);
@@ -75,6 +82,7 @@ public class BloodStocksController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "donor, manager")]
     public async Task<IActionResult> Delete(int id)
     {
         var command = new DeleteBloodStockCommand(id);

@@ -15,6 +15,8 @@ public class Donor : BaseEntity
     public Donor(Name name,
         CPF cpf,
         Email email,
+        Password password,
+        string role,
         DateTime birthDate,
         GenderEnum gender,
         double weight,
@@ -25,6 +27,8 @@ public class Donor : BaseEntity
         Name = name;
         CPF = cpf;
         Email = email;
+        Password = password;
+        Role = role;
         BirthDate = birthDate;
         Gender = gender;
         Weight = weight;
@@ -41,6 +45,8 @@ public class Donor : BaseEntity
     public Name Name { get; private set; }
     public CPF CPF { get; private set; }
     public Email Email { get; private set; }
+    public Password  Password { get; private set; }
+    public string Role { get; private set; }
     public DateTime BirthDate { get; private set; }
     public GenderEnum Gender  { get; private set; }
     public double Weight { get; private set; }
@@ -62,7 +68,7 @@ public class Donor : BaseEntity
 
     public void Update(Name name,
         CPF cpf,
-        Email email, DateTime birthDate, GenderEnum gender, double weight, BloodTypeEnum bloodType, RHFactorEnum rHFactor, Address address )
+        Email email, DateTime birthDate, GenderEnum gender, double weight, BloodTypeEnum bloodType, RHFactorEnum rHFactor, Address address, Password password )
     {
         Name = name;
         CPF = cpf;
@@ -73,6 +79,7 @@ public class Donor : BaseEntity
         BloodType = bloodType;
         RHFactor = rHFactor;
         Address = address;
+        Password = password;
 
         UpdatedAt = DateTime.Now;
     }
