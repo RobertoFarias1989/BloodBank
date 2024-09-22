@@ -23,9 +23,20 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(
     c =>
     {
-        //c.EnableAnnotations();
+        c.EnableAnnotations();
 
-        c.SwaggerDoc("v1", new OpenApiInfo { Title = "LoveReads.API", Version = "v1" });
+        c.SwaggerDoc("v1", new OpenApiInfo
+        { 
+            Version = "v1",
+            Title = "BloodBank.API",
+            Description = "Sistema de banco de dados de doação de sangue",
+            Contact = new OpenApiContact
+            {
+                Name = "Roberto Farias",
+                Email = "robertosf1989@gmail.com",
+                Url = new Uri("https://www.linkedin.com/in/robertosfarias/")
+            }
+        });
 
         c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
         {

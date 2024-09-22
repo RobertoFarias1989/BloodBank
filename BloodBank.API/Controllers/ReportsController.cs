@@ -1,9 +1,11 @@
 ﻿using BloodBank.Application.BloodStock.Queries.GetBloodStockReport;
 using BloodBank.Application.BloodStock.ViewModels;
+using BloodBank.Application.Login.Commands;
 using FastReport.Export.PdfSimple;
 using FastReport.Web;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Data;
 
 namespace BloodBank.API.Controllers;
@@ -21,6 +23,8 @@ public class ReportsController : ControllerBase
 
     [Route("blood-stock")]
     [HttpGet]
+    [SwaggerOperation(Summary = "Gera um Report sobre a quantidade de BloodStock")]
+    [ProducesResponseType(typeof(LoginCommand), StatusCodes.Status200OK)]
     public async Task<IActionResult> ReportBloodStock()
     {
         var getAllBloodStocksQuery = new GetBloodStockReportQuery();
